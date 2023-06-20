@@ -1,8 +1,8 @@
 "use client";
 
-import { Message } from "ai";
+import { RefObject, useEffect, useRef } from "react";
 import { useChat } from "ai/react";
-import { useEffect } from "react";
+import { Message } from "ai";
 
 export type Round = {
   id: string;
@@ -46,7 +46,14 @@ const initMessages = [
   },
 ] as Message[];
 
+function scrollToBottom(ref: RefObject<HTMLDivElement>) {
+  if (ref.current) {
+    ref.current.scrollIntoView({ behavior: "smooth", block: "end" });
+  }
+}
+
 export default function Page() {
+  const ref = useRef<HTMLDivElement>(null);
   const { messages, input, handleInputChange, handleSubmit, setMessages } =
     useChat();
 
@@ -54,8 +61,15 @@ export default function Page() {
     setMessages(initMessages);
   }, []);
 
+  useEffect(() => {
+    scrollToBottom(ref);
+  }, [messages]);
+
   return (
-    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
+    <div
+      ref={ref}
+      className="flex flex-col w-full max-w-md py-24 mx-auto stretch px-4"
+    >
       {messages.length > 0
         ? messages.map((m) => {
             const isSystemMessage = m.role === "system";
@@ -72,7 +86,7 @@ export default function Page() {
 
       <form onSubmit={handleSubmit}>
         <input
-          className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
+          className="w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-zinc-800"
           value={input}
           placeholder="Say something..."
           onChange={handleInputChange}
