@@ -56,12 +56,12 @@ export default function Page() {
   const ref = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const {
+    isLoading: isWriting,
     handleInputChange,
     handleSubmit,
     setMessages,
     messages,
     input,
-    isLoading: isWriting,
   } = useChat({ onResponse: () => setIsLoading(false) });
 
   useEffect(() => {
@@ -73,7 +73,8 @@ export default function Page() {
   }, [messages, isWriting, input]);
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="scroll-m-20">
+      <h1 className="text-5xl font-bold">Game</h1>
       {messages.length > 0
         ? messages.map((m) => {
             const isSystemMessage = m.role === "system";
@@ -81,7 +82,7 @@ export default function Page() {
               !isSystemMessage && (
                 <div key={m.id} className="mt-6 whitespace-pre-wrap">
                   <p className="font-bold border-b border-gray-300">
-                    {m.role === "user" ? "You " : "Game Master "}
+                    {m.role === "user" ? "You" : "Storyteller"}
                   </p>
                   <p className="mt-1">{m.content}</p>
                 </div>
@@ -104,21 +105,21 @@ export default function Page() {
           }}
         >
           {!isWriting && (
-            <input
-              className="w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-stone-700 "
-              value={input}
-              placeholder="Say something..."
-              onChange={handleInputChange}
-              autoFocus
-            />
-          )}
-          {input && (
-            <button
-              className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-auto font-bold"
-              type="submit"
-            >
-              Send
-            </button>
+            <div className="left-0 flex">
+              <input
+                className=" w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-stone-700"
+                value={input}
+                placeholder="Say something..."
+                onChange={handleInputChange}
+              />
+              <button
+                className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-4 font-bold disabled:opacity-50"
+                type="submit"
+                disabled={isWriting || input === ""}
+              >
+                Send
+              </button>
+            </div>
           )}
         </form>
       )}

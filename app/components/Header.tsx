@@ -12,7 +12,7 @@ interface HeaderProps {
 export const Header = ({ children, className, style }: HeaderProps) => {
   const pathName = usePathname();
   return (
-    <header className="flex p-4 bg-slate-300 w-full text-stone-800">
+    <header className="fixed w-screen flex p-4 bg-slate-300 text-stone-800">
       <nav>
         {pathName !== "/" && (
           <Link
