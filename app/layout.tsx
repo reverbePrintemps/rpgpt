@@ -1,3 +1,4 @@
+import { Header } from "./components/Header";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
@@ -11,8 +12,13 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className="bg-stone-800 text-slate-300">
+      <body className={inter.className}>
+        <Header />
+        <div className="flex flex-col w-full max-w-md py-8 mx-auto stretch px-4">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
