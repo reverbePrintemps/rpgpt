@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { useChat } from "ai/react";
 import { Message } from "ai";
 
@@ -54,8 +54,9 @@ function scrollToBottom(ref: RefObject<HTMLDivElement>) {
 
 export default function Page() {
   const ref = useRef<HTMLDivElement>(null);
-  const { messages, input, handleInputChange, handleSubmit, setMessages } =
-    useChat();
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleInputChange, handleSubmit, setMessages, messages, input } =
+    useChat({ onResponse: () => setIsLoading(false) });
 
   useEffect(() => {
     setMessages(initMessages);
@@ -83,15 +84,28 @@ export default function Page() {
             );
           })
         : null}
+      {isLoading && (
+        <div className="mt-6 whitespace-pre-wrap">
+          <p>Game Master</p>
+          <p className="mt-1">Loading...</p>
+        </div>
+      )}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          className="w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-zinc-800"
-          value={input}
-          placeholder="Say something..."
-          onChange={handleInputChange}
-        />
-      </form>
+      {messages.length > 0 && (
+        <form
+          onSubmit={(e) => {
+            setIsLoading(true);
+            handleSubmit(e);
+          }}
+        >
+          <input
+            className="w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-zinc-800"
+            value={input}
+            placeholder="Say something..."
+            onChange={handleInputChange}
+          />
+        </form>
+      )}
     </div>
   );
 }
