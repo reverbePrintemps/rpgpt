@@ -70,7 +70,7 @@ export default function Page() {
 
   useEffect(() => {
     scrollToBottom(ref);
-  }, [messages, isWriting]);
+  }, [messages, isWriting, input]);
 
   return (
     <div ref={ref}>
@@ -80,7 +80,9 @@ export default function Page() {
             return (
               !isSystemMessage && (
                 <div key={m.id} className="mt-6 whitespace-pre-wrap">
-                  <p>{m.role === "user" ? "User " : "Game Master "}</p>
+                  <p className="font-bold border-b border-gray-300">
+                    {m.role === "user" ? "You " : "Game Master "}
+                  </p>
                   <p className="mt-1">{m.content}</p>
                 </div>
               )
@@ -89,12 +91,13 @@ export default function Page() {
         : null}
       {isLoading && (
         <div className="mt-6 whitespace-pre-wrap">
-          <p>Game Master</p>
+          <p className="font-bold border-b border-gray-300">Game Master</p>
           <p className="mt-1">Loading...</p>
         </div>
       )}
       {messages.length > 0 && (
         <form
+          className="flex flex-col"
           onSubmit={(e) => {
             setIsLoading(true);
             handleSubmit(e);
@@ -106,7 +109,16 @@ export default function Page() {
               value={input}
               placeholder="Say something..."
               onChange={handleInputChange}
+              autoFocus
             />
+          )}
+          {input && (
+            <button
+              className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-auto font-bold"
+              type="submit"
+            >
+              Send
+            </button>
           )}
         </form>
       )}

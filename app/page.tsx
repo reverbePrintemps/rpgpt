@@ -12,7 +12,7 @@ export default function Page() {
         href="/game"
         className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-auto"
       >
-        <button>Start game</button>
+        <button className="font-bold">Start game</button>
       </Link>
     </div>
   );
