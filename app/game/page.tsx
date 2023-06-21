@@ -1,127 +1,165 @@
 "use client";
-
-import { RefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { completeJSON, scrollToBottom } from "../_utils/general";
+import { Round } from "../components/Round";
 import { useChat } from "ai/react";
 import { Message } from "ai";
 
-export type Round = {
-  id: string;
-  prompt: string;
-  options:
-    | {
-        a: { text: string };
-        b: { text: string };
-      }
-    | undefined;
-  game_over: "win" | "lose" | undefined;
-};
+// TODO
+// - [ ] Cleanup and commit
+// - [ ] Throw JSON parsing errors to be able to improve completeJSON function
+// - [ ] Show prompt options (ie buttons) as they are received
+// - [ ] Append latest round to the rest of the rounds
+// - [ ] Round probably doesn't need both an onClick and an onSubmit. Unify.
+//1 - [ ] Use or delete useLatestRound hook
+// - [ ] Rotating placeholder text (cf. Spork)
+// - [ ] Autogrowing textarea (cf. Spork)
+//2 - [ ] Rely on something else than messages to scroll to bottom to prevent slight jitter when messages are received but not yet able to be parsed and rendered
 
 const roundExample: Round = {
-  id: "string",
   prompt: "string",
-  options:
-    {
-      a: { text: "string" },
-      b: { text: "string" },
-    } || undefined,
+  options: [{ id: 0, text: "string" }] || undefined,
+  // A list of items that the player will get access to as the game progresses
+  items:
+    [
+      {
+        id: 0,
+        name: "string",
+        owner: "string" || undefined,
+        current_holder: "player" || "npc" || "location" || undefined,
+        location: "string" || undefined,
+      },
+    ] || undefined,
+  // Property should only be defined when the game ends
   game_over: "win" || "lose" || undefined,
 };
-
-// TODO, add to system message once found a JSON parser that works for streams
-// , strictly formatted in valid JSON, like so: ${JSON.stringify(
-//   roundExample
-// )}, and nothing more.
 
 const initMessages = [
   {
     id: "0",
     role: "system",
-    content:
-      "You are a text-based adventure game master. The game will take place in a specific universe that will soon be provided by the player and will last a maximum of three rounds. Each round, you will present the player with one prompt and two actions to choose from. Once the player has provided you with an action, you will provide a new prompt based on their choice. The game ends either with the player's death or with a successful completion of the game's objective.",
+    content: `You are a text-based adventure game master. All of your responses should be strictly formatted like so: ${JSON.stringify(
+      roundExample
+    )}.`,
   },
   {
     id: "1",
     role: "assistant",
-    content: "What universe would you like your game to take place in?",
+    // !Important: The prompt must be a stringified JSON object
+    // TODO Add type safety to this somehow
+    content: `{ "id": "0", "prompt": "What kind of adventure would you like to go on? You can provide as much or a little detail as you wish." }`,
   },
 ] as Message[];
-
-function scrollToBottom(ref: RefObject<HTMLDivElement>) {
-  if (ref.current) {
-    ref.current.scrollIntoView({ behavior: "smooth", block: "end" });
-  }
-}
 
 export default function Page() {
   const ref = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [rounds, setRounds] = useState<Round[]>([]);
+  const [latestRound, setLatestRound] = useState<Round | null>(null);
+  //TD1 const { latestRound, setMessage: getLatestRound } = useLatestRound();
+
   const {
     isLoading: isWriting,
     handleInputChange,
     handleSubmit,
     setMessages,
     messages,
+    setInput,
     input,
-  } = useChat({ onResponse: () => setIsLoading(false) });
+  } = useChat({
+    onResponse: () => setIsLoading(false),
+    onFinish: (message) => {
+      setRounds((rounds) => [...rounds, JSON.parse(message.content)]);
+      setLatestRound(null);
+    },
+  });
 
   useEffect(() => {
     setMessages(initMessages);
   }, []);
 
   useEffect(() => {
-    scrollToBottom(ref);
-  }, [messages, isWriting, input]);
+    const lastMessage = messages[messages.length - 1];
+    if (!messages.length) return;
+    const completedJSON = completeJSON(lastMessage.content);
+    try {
+      const parsedRound = JSON.parse(completedJSON);
+      if (parsedRound) {
+        setLatestRound(parsedRound);
+      }
+    } catch (error) {
+      // Do nothing because a lot of errors are expected to happen
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    // TD2
+    scrollToBottom(ref, "smooth", "end");
+  }, [messages]);
 
   return (
-    <div ref={ref} className="scroll-m-20">
+    <div ref={ref} className="scroll-m-52">
       <h1 className="text-5xl font-bold">Game</h1>
-      {messages.length > 0
-        ? messages.map((m) => {
-            const isSystemMessage = m.role === "system";
-            return (
-              !isSystemMessage && (
-                <div key={m.id} className="mt-6 whitespace-pre-wrap">
-                  <p className="font-bold border-b border-gray-300">
-                    {m.role === "user" ? "You" : "Storyteller"}
-                  </p>
-                  <p className="mt-1">{m.content}</p>
-                </div>
-              )
-            );
-          })
-        : null}
-      {isLoading && (
-        <div className="mt-6 whitespace-pre-wrap">
-          <p className="font-bold border-b border-gray-300">Game Master</p>
-          <p className="mt-1">Loading...</p>
-        </div>
-      )}
-      {messages.length > 0 && (
-        <form
-          className="flex flex-col"
+      {rounds.map((round) => (
+        <Round
+          key={round.prompt}
+          round={round}
+          onChoiceSelected={setInput}
           onSubmit={(e) => {
             setIsLoading(true);
             handleSubmit(e);
           }}
-        >
-          {!isWriting && (
-            <div className="left-0 flex">
-              <input
-                className=" w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-stone-700"
-                value={input}
-                placeholder="Say something..."
-                onChange={handleInputChange}
-              />
-              <button
-                className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-4 font-bold disabled:opacity-50"
-                type="submit"
-                disabled={isWriting || input === ""}
-              >
-                Send
-              </button>
-            </div>
+        />
+      ))}
+      {latestRound && (
+        <>
+          <Round
+            round={latestRound}
+            onChoiceSelected={setInput}
+            onSubmit={(e) => {
+              setIsLoading(true);
+              handleSubmit(e);
+            }}
+          />
+          {!latestRound.options && (
+            <form
+              className="flex flex-col"
+              onSubmit={(e) => {
+                setIsLoading(true);
+                handleSubmit(e);
+              }}
+            >
+              {!isWriting && (
+                <div className="left-0 flex">
+                  <input
+                    className=" w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-stone-700"
+                    value={input}
+                    placeholder="Type your response here..."
+                    onChange={handleInputChange}
+                  />
+                  <button
+                    className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-4 font-bold disabled:opacity-50"
+                    type="submit"
+                    disabled={isWriting || input === ""}
+                  >
+                    Send
+                  </button>
+                </div>
+              )}
+            </form>
           )}
-        </form>
+        </>
+      )}
+      {/* 
+      // TODO Throw isLoading into Round component
+       */}
+      {isLoading && (
+        <div className="mt-6 whitespace-pre-wrap">
+          <p className="text-xl font-bold border-b-2 pb-1 border-gray-300">
+            Storyteller
+          </p>
+          <p className="mt-1">Loading...</p>
+        </div>
       )}
     </div>
   );

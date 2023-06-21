@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className="bg-stone-800 text-slate-300">
       <body className={inter.className}>
         <Header />
-        <div className="flex flex-col w-full max-w-md pt-20 pb-20 mx-auto stretch px-4">
+        <div className="flex flex-col w-full max-w-md pt-20 pb-40 mx-auto stretch px-4">
           {children}
         </div>
       </body>
