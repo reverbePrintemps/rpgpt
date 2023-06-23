@@ -46,7 +46,7 @@ export const Round = ({
         Storyteller
       </p>
       <div className="mt-2">
-        <p>{round.prompt}</p>
+        <p>{round.prompt || "Loading..."}</p>
         <form
           onSubmit={(e) => {
             onSubmit?.(e);

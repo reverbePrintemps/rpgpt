@@ -2,24 +2,25 @@ import { RefObject } from "react";
 
 // TODO
 // - [ ] Think about whether it should return a string or a JSON object
+// - [ ] Use conditional types to make sure that the returned type is a JSON object
 
 /**
- * @param  {string} token
+ * @param  {string} fragment
  * @returns string
  * @description This function takes a string representation of a JSON object and completes any open strings, arrays, and objects while attempting to prevent common parsing errors.
  */
-export const completeJSON = (token: string): string => {
+export const forceParse = (fragment: string): object | undefined => {
   let openQuotes = 0;
   let openBrackets = 0;
   let openBraces = 0;
-  let completedToken = token;
+  let completedToken = fragment;
 
-  for (let i = 0; i < token.length; i++) {
-    const char = token[i];
+  for (let i = 0; i < fragment.length; i++) {
+    const char = fragment[i];
 
     if (char === '"') {
       // Skip if the quote is escaped with a backslash
-      if (i > 0 && token[i - 1] === "\\") {
+      if (i > 0 && fragment[i - 1] === "\\") {
         continue;
       }
 
@@ -64,7 +65,12 @@ export const completeJSON = (token: string): string => {
     completedToken += "}".repeat(openBraces);
   }
 
-  return completedToken;
+  try {
+    const parsed = JSON.parse(completedToken);
+    if (parsed) return parsed;
+  } catch (error) {
+    console.log("failed to parse:", completedToken);
+  }
 };
 
 export const scrollToBottom = (

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { completeJSON, scrollToBottom } from "../_utils/general";
+import { forceParse, scrollToBottom } from "../_utils/general";
 import { Round } from "../components/Round";
 import { useChat } from "ai/react";
 import { Message } from "ai";
@@ -69,7 +69,10 @@ export default function Page() {
     initialMessages: initMessages,
     onResponse: () => setIsLoading(false),
     onFinish: (message) => {
-      setRounds((rounds) => [...rounds, JSON.parse(message.content)]);
+      console.log("onFinish message", message.content);
+      const parsed = forceParse(message.content) as Round;
+      if (!parsed) return;
+      setRounds((prev) => [...prev, parsed]);
       setLatestRound(null);
     },
     //TD3
@@ -79,16 +82,9 @@ export default function Page() {
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     if (!messages.length) return;
-    const completedJSON = completeJSON(lastMessage.content);
-    try {
-      const parsedRound = JSON.parse(completedJSON);
-      if (parsedRound) {
-        setLatestRound(parsedRound);
-      }
-    } catch (error) {
-      // console.log("failed to parse:", lastMessage.content);
-      // Do nothing because a lot of errors are expected to happen
-    }
+    const completedJSON = forceParse(lastMessage.content) as Round;
+    if (!completedJSON) return;
+    setLatestRound(completedJSON);
   }, [messages]);
 
   useEffect(() => {
