@@ -1,5 +1,5 @@
 "use client";
-import { forceParse, scrollToBottom } from "../_utils/general";
+import { forceParse, scrollToBottom } from "../utils/general";
 import { useLatestRound } from "../hooks/latest-round";
 import { useEffect, useRef, useState } from "react";
 import { Round } from "../components/Round";
@@ -34,7 +34,7 @@ const roundExample: Round = {
   game_over: "win" || "lose" || undefined,
 };
 
-const initMessages = [
+const initialMessages = [
   {
     id: "0",
     role: "system",
@@ -69,7 +69,7 @@ export default function Page() {
     setInput,
     input,
   } = useChat({
-    initialMessages: initMessages,
+    initialMessages,
     onResponse: () => setIsLoading(false),
     onFinish: (message) => {
       const parsed = forceParse(message.content) as Round;
@@ -102,16 +102,14 @@ export default function Page() {
         />
       ))}
       {latestRound && (
-        <>
-          <Round
-            round={latestRound}
-            onChoiceSelected={setInput}
-            onSubmit={(e) => {
-              setIsLoading(true);
-              handleSubmit(e);
-            }}
-          />
-        </>
+        <Round
+          round={latestRound}
+          onChoiceSelected={setInput}
+          onSubmit={(e) => {
+            setIsLoading(true);
+            handleSubmit(e);
+          }}
+        />
       )}
       {/* // TODO A bit confusing. Should be simplified. */}
       {!isWriting && latestRound && !latestRound.options && (
