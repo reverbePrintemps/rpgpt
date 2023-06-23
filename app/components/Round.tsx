@@ -1,4 +1,5 @@
 import { ReactNode, CSSProperties, useState } from "react";
+import Link from "next/link";
 
 export type Round = {
   prompt: string;
@@ -47,30 +48,40 @@ export const Round = ({
       </p>
       <div className="mt-2">
         <p>{round.prompt || "Loading..."}</p>
-        <form
-          onSubmit={(e) => {
-            onSubmit?.(e);
-          }}
-        >
-          {round.options?.map((o) => (
-            <button
-              key={o.id}
-              type="submit"
-              className={`${
-                optionSelected === o.id ? "bg-slate-300" : "bg-stone-400"
-              }
+        {round.options && (
+          <form
+            onSubmit={(e) => {
+              onSubmit?.(e);
+            }}
+          >
+            {round.options.map((o) => (
+              <button
+                key={o.id}
+                type="submit"
+                className={`${
+                  optionSelected === o.id ? "bg-slate-300" : "bg-stone-400"
+                }
               ${optionSelected === undefined && "hover:bg-stone-600"}
               text-stone-800 p-2 rounded-lg m-2 ml-auto text-left disabled:opacity-40`}
-              onClick={() => {
-                onClick?.(o.text);
-                setOptionSelected(o.id);
-              }}
-              disabled={optionSelected !== undefined}
-            >
-              {o.text}
-            </button>
-          ))}
-        </form>
+                onClick={() => {
+                  onClick?.(o.text);
+                  setOptionSelected(o.id);
+                }}
+                disabled={optionSelected !== undefined}
+              >
+                {o.text}
+              </button>
+            ))}
+          </form>
+        )}
+        {round.game_over && (
+          <Link
+            href="/"
+            className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-auto inline-block"
+          >
+            <button className="font-bold">New adventure</button>
+          </Link>
+        )}
       </div>
     </div>
   );

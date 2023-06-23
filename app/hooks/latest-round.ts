@@ -5,20 +5,15 @@ import { Message } from "ai";
 
 export const useLatestRound = () => {
   const [message, setMessage] = useState<Message>();
-  const [round, setRound] = useState<Round>();
+  const [round, setRound] = useState<Round | null>(null);
 
   useEffect(() => {
     if (!message) return;
     if (message.role === ("system" || "user")) return;
-    const completedJSON = forceParse(message.content);
-    // console.log("completedJSON", completedJSON);
-    try {
-      const parsedRound: Round = JSON.parse(completedJSON);
-      if (parsedRound) setRound(parsedRound);
-    } catch (e) {
-      // console.log("e", e);
-    }
+    const completedJSON = forceParse(message.content) as Round;
+    if (!completedJSON) return;
+    setRound(completedJSON);
   }, [message]);
 
-  return { setMessage, latestRound: round };
+  return { setMessage, latestRound: round, setRound };
 };

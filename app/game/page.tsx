@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
 import { forceParse, scrollToBottom } from "../_utils/general";
+import { useLatestRound } from "../hooks/latest-round";
+import { useEffect, useRef, useState } from "react";
 import { Round } from "../components/Round";
 import { useChat } from "ai/react";
 import { Message } from "ai";
@@ -11,7 +12,6 @@ import { Message } from "ai";
 // - [ ] Show prompt options (ie buttons) as they are received
 // - [ ] Append latest round to the rest of the rounds
 // - [ ] Round probably doesn't need both an onClick and an onSubmit. Unify.
-//1 - [ ] Use or delete useLatestRound hook
 //3 - [ ] Rotating placeholder text (cf. Spork)
 // - [ ] Autogrowing textarea (cf. Spork)
 //2 - [ ] Rely on something else than messages to scroll to bottom to prevent slight jitter when messages are received but not yet able to be parsed and rendered
@@ -55,8 +55,11 @@ export default function Page() {
   const ref = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [rounds, setRounds] = useState<Round[]>([]);
-  const [latestRound, setLatestRound] = useState<Round | null>(null);
-  //TD1 const { latestRound, setMessage: getLatestRound } = useLatestRound();
+  const {
+    latestRound,
+    setMessage,
+    setRound: setLatestRound,
+  } = useLatestRound();
 
   const {
     isLoading: isWriting,
@@ -69,7 +72,6 @@ export default function Page() {
     initialMessages: initMessages,
     onResponse: () => setIsLoading(false),
     onFinish: (message) => {
-      console.log("onFinish message", message.content);
       const parsed = forceParse(message.content) as Round;
       if (!parsed) return;
       setRounds((prev) => [...prev, parsed]);
@@ -80,14 +82,7 @@ export default function Page() {
   });
 
   useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
-    if (!messages.length) return;
-    const completedJSON = forceParse(lastMessage.content) as Round;
-    if (!completedJSON) return;
-    setLatestRound(completedJSON);
-  }, [messages]);
-
-  useEffect(() => {
+    setMessage(messages[messages.length - 1]);
     // TD2
     scrollToBottom(ref, "smooth", "end");
   }, [messages]);
