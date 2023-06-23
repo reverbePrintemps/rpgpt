@@ -67,6 +67,8 @@ export const Round = ({
                   onClick?.(o.text);
                   setOptionSelected(o.id);
                 }}
+                // No basic tailwind for this
+                style={{ minHeight: "40px" }}
                 disabled={optionSelected !== undefined}
               >
                 {o.text}
