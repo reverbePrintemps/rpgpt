@@ -1,5 +1,4 @@
 import { ReactNode, CSSProperties, useState } from "react";
-import { completeJSON } from "../_utils/general";
 
 export type Round = {
   prompt: string;
@@ -36,6 +35,7 @@ export const Round = ({
   onSubmit,
   onChoiceSelected: onClick,
 }: RoundProps) => {
+  const [optionSelected, setOptionSelected] = useState<number>();
   return (
     <div
       key={round.prompt}
@@ -46,27 +46,31 @@ export const Round = ({
         Storyteller
       </p>
       <div className="mt-2">
-        {round.prompt}
-        {round.options && (
-          <form
-            onSubmit={(e) => {
-              onSubmit?.(e);
-            }}
-          >
-            {round.options.map((o) => (
-              <button
-                key={o.id}
-                type="submit"
-                className="bg-slate-300 text-stone-800 p-2 rounded-lg m-2 ml-auto text-left"
-                onClick={() => {
-                  onClick?.(o.text);
-                }}
-              >
-                {o.text}
-              </button>
-            ))}
-          </form>
-        )}
+        <p>{round.prompt}</p>
+        <form
+          onSubmit={(e) => {
+            onSubmit?.(e);
+          }}
+        >
+          {round.options?.map((o) => (
+            <button
+              key={o.id}
+              type="submit"
+              className={`${
+                optionSelected === o.id ? "bg-slate-300" : "bg-stone-400"
+              }
+              ${optionSelected === undefined && "hover:bg-stone-600"}
+              text-stone-800 p-2 rounded-lg m-2 ml-auto text-left disabled:opacity-40`}
+              onClick={() => {
+                onClick?.(o.text);
+                setOptionSelected(o.id);
+              }}
+              disabled={optionSelected !== undefined}
+            >
+              {o.text}
+            </button>
+          ))}
+        </form>
       </div>
     </div>
   );

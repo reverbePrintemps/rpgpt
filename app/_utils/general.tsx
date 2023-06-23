@@ -1,5 +1,8 @@
 import { RefObject } from "react";
 
+// TODO
+// - [ ] Think about whether it should return a string or a JSON object
+
 /**
  * @param  {string} token
  * @returns string

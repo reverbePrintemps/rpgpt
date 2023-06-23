@@ -12,7 +12,7 @@ import { Message } from "ai";
 // - [ ] Append latest round to the rest of the rounds
 // - [ ] Round probably doesn't need both an onClick and an onSubmit. Unify.
 //1 - [ ] Use or delete useLatestRound hook
-// - [ ] Rotating placeholder text (cf. Spork)
+//3 - [ ] Rotating placeholder text (cf. Spork)
 // - [ ] Autogrowing textarea (cf. Spork)
 //2 - [ ] Rely on something else than messages to scroll to bottom to prevent slight jitter when messages are received but not yet able to be parsed and rendered
 
@@ -62,21 +62,19 @@ export default function Page() {
     isLoading: isWriting,
     handleInputChange,
     handleSubmit,
-    setMessages,
     messages,
     setInput,
     input,
   } = useChat({
+    initialMessages: initMessages,
     onResponse: () => setIsLoading(false),
     onFinish: (message) => {
       setRounds((rounds) => [...rounds, JSON.parse(message.content)]);
       setLatestRound(null);
     },
+    //TD3
+    // initialInput: "",
   });
-
-  useEffect(() => {
-    setMessages(initMessages);
-  }, []);
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
@@ -88,6 +86,7 @@ export default function Page() {
         setLatestRound(parsedRound);
       }
     } catch (error) {
+      // console.log("failed to parse:", lastMessage.content);
       // Do nothing because a lot of errors are expected to happen
     }
   }, [messages]);
@@ -121,34 +120,33 @@ export default function Page() {
               handleSubmit(e);
             }}
           />
-          {!latestRound.options && (
-            <form
-              className="flex flex-col"
-              onSubmit={(e) => {
-                setIsLoading(true);
-                handleSubmit(e);
-              }}
-            >
-              {!isWriting && (
-                <div className="left-0 flex">
-                  <input
-                    className=" w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-stone-700"
-                    value={input}
-                    placeholder="Type your response here..."
-                    onChange={handleInputChange}
-                  />
-                  <button
-                    className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-4 font-bold disabled:opacity-50"
-                    type="submit"
-                    disabled={isWriting || input === ""}
-                  >
-                    Send
-                  </button>
-                </div>
-              )}
-            </form>
-          )}
         </>
+      )}
+      {/* // TODO A bit confusing. Should be simplified. */}
+      {!isWriting && latestRound && !latestRound.options && (
+        <form
+          className="flex flex-col"
+          onSubmit={(e) => {
+            setIsLoading(true);
+            handleSubmit(e);
+          }}
+        >
+          <div className="left-0 flex">
+            <input
+              className=" w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-stone-700"
+              value={input}
+              placeholder="Type your response here..."
+              onChange={handleInputChange}
+            />
+            <button
+              className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-4 font-bold disabled:opacity-50"
+              type="submit"
+              disabled={isWriting || input === ""}
+            >
+              Send
+            </button>
+          </div>
+        </form>
       )}
       {/* 
       // TODO Throw isLoading into Round component
