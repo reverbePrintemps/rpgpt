@@ -1,22 +1,20 @@
 "use client";
+import { AutogrowingInput } from "../components/AutogrowingInput";
 import { forceParse, scrollToBottom } from "../utils/general";
 import { useLatestRound } from "../hooks/latest-round";
+import { typingEffect } from "../utils/typing-effect";
 import { useEffect, useRef, useState } from "react";
 import { Round } from "../components/Round";
 import { useChat } from "ai/react";
 import { Message } from "ai";
 
 // TODO
-// - [ ] Cleanup and commit
-// - [ ] Throw JSON parsing errors to be able to improve completeJSON function
-// - [ ] Show prompt options (ie buttons) as they are received
-// - [ ] Append latest round to the rest of the rounds
+
 // - [ ] Round probably doesn't need both an onClick and an onSubmit. Unify.
-//3 - [ ] Rotating placeholder text (cf. Spork)
-// - [ ] Autogrowing textarea (cf. Spork)
 //2 - [ ] Rely on something else than messages to scroll to bottom to prevent slight jitter when messages are received but not yet able to be parsed and rendered
 
 const roundExample: Round = {
+  id: 0,
   prompt: "string",
   options: [{ id: 0, text: "string" }] || undefined,
   // A list of items that the player will get access to as the game progresses
@@ -47,9 +45,27 @@ const initialMessages = [
     role: "assistant",
     // !Important: The prompt must be a stringified JSON object
     // TODO Add type safety to this somehow
-    content: `{ "id": "0", "prompt": "What kind of adventure would you like to go on? You can provide as much or a little detail as you wish." }`,
+    // Or make it safe for it to not be a stringified JSON object
+    content:
+      "What kind of adventure would you like to go on? You can provide as much or a little detail as you wish.",
   },
 ] as Message[];
+
+const placeholderPrompts = [
+  "I'm a hacker in a corrupt cyberpunk city. The Marauders are blackmailing me into hacking the Galactic Bank.",
+  "I'm lazy, any adventure will do :)",
+  "As an apprentice sorcerer, I must retrieve the artifact and restore balance to the kingdom!",
+  "I'm a drunk pirate captain seeking the best rum in the Caribbean.",
+  "What is love?",
+  `"It's August 11, 2398, the Dyson Sphere around the Sun is complete. Humanity is now a Type II civilization."`,
+  "World Sandwich Making Championship.",
+  "Everybody was Kung Fu fighting when suddenly...",
+  "Like Lord of the Rings, but with cats.",
+  "What if Back to the Future was a horror movie?",
+  "Surprise me!",
+  "I am the high-priestess of Albondiga, the legendary capital city of the Meatballfolk and I must retrieve my spaghetti scepter.",
+  "I have no inspiration, throw me a bone here.",
+];
 
 export default function Page() {
   const ref = useRef<HTMLDivElement>(null);
@@ -77,11 +93,19 @@ export default function Page() {
       setRounds((prev) => [...prev, parsed]);
       setLatestRound(null);
     },
-    //TD3
-    // initialInput: "",
+  });
+
+  const typingPlaceholders = typingEffect({
+    cursor: true,
+    typingSpeed: 30,
+    repeat: Infinity,
+    pauseLength: 1000,
+    omitDeletionAnimation: true,
+    sequence: placeholderPrompts,
   });
 
   useEffect(() => {
+    process.env.NODE_ENV === "development" && console.log("messages", messages);
     setMessage(messages[messages.length - 1]);
     // TD2
     scrollToBottom(ref, "smooth", "end");
@@ -92,7 +116,7 @@ export default function Page() {
       <h1 className="text-5xl font-bold">Game</h1>
       {rounds.map((round) => (
         <Round
-          key={round.prompt}
+          key={round.id}
           round={round}
           onChoiceSelected={setInput}
           onSubmit={(e) => {
@@ -114,21 +138,28 @@ export default function Page() {
       {/* // TODO A bit confusing. Should be simplified. */}
       {!isWriting && latestRound && !latestRound.options && (
         <form
-          className="flex flex-col"
+          className="flex flex-col mt-4"
           onSubmit={(e) => {
             setIsLoading(true);
             handleSubmit(e);
           }}
         >
           <div className="left-0 flex">
-            <input
-              className=" w-full max-w-md p-2 mt-8 border border-gray-300 rounded shadow-xl bg-stone-700"
-              value={input}
-              placeholder="Type your response here..."
+            <AutogrowingInput
               onChange={handleInputChange}
+              placeholder={typingPlaceholders}
+              value={input}
+              onEnter={() =>
+                handleSubmit(
+                  new Event("submit", {
+                    cancelable: true,
+                    bubbles: true,
+                  }) as any
+                )
+              }
             />
             <button
-              className="bg-slate-300 text-stone-800 p-4 rounded-lg mt-8 ml-4 font-bold disabled:opacity-50"
+              className="bg-slate-300 text-stone-800 p-2 rounded-lg ml-4 font-bold disabled:opacity-50"
               type="submit"
               disabled={isWriting || input === ""}
             >
@@ -138,7 +169,7 @@ export default function Page() {
         </form>
       )}
       {/* 
-      // TODO Throw isLoading into Round component
+      // TODO Throw isLoading into Round component (?)
        */}
       {isLoading && (
         <div className="mt-6 whitespace-pre-wrap">

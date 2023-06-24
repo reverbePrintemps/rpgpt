@@ -9,7 +9,9 @@ import { RefObject } from "react";
  * @returns string
  * @description This function takes a string representation of a JSON object and completes any open strings, arrays, and objects while attempting to prevent common parsing errors.
  */
-export const forceParse = (fragment: string): object | undefined => {
+export const forceParse = (fragment: string): string | object | undefined => {
+  // If first character is not a {, return undefined
+  if (fragment[0] !== "{") return fragment;
   const stack: Array<string> = []; // Stack to keep track of opening symbols
   let completedToken = fragment;
   let currentIndex = 0;

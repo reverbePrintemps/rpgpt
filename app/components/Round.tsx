@@ -2,6 +2,7 @@ import { ReactNode, CSSProperties, useState } from "react";
 import Link from "next/link";
 
 export type Round = {
+  id: number;
   prompt: string;
   options?: {
     id: number;
@@ -47,7 +48,12 @@ export const Round = ({
         Storyteller
       </p>
       <div className="mt-2">
-        <p>{round.prompt || "Loading..."}</p>
+        <p>
+          {round.prompt ||
+            // TODO Ugly, temporary solution for when message contains plain text only (or before JSON) - Delete when relevant
+            (round as unknown as string) ||
+            "Loading..."}
+        </p>
         {round.options && (
           <form
             onSubmit={(e) => {
