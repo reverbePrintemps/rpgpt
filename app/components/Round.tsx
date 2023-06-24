@@ -1,4 +1,4 @@
-import { ReactNode, CSSProperties, useState } from "react";
+import { CSSProperties, useState } from "react";
 import Link from "next/link";
 
 export type Round = {
@@ -8,33 +8,23 @@ export type Round = {
     id: number;
     text: string;
   }[];
-  items?: [
-    {
-      id: number;
-      name: string;
-      owner?: string;
-      current_holder: string;
-      location?: string;
-    }
-  ];
+  free_text?: boolean;
   game_over?: "win" | "lose";
 };
 
 interface RoundProps {
-  children?: ReactNode;
-  className?: string;
-  style?: CSSProperties;
-  round: Round;
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   onChoiceSelected?: (input: string) => void;
+  style?: CSSProperties;
+  className?: string;
+  round: Round;
 }
 
 export const Round = ({
-  children,
-  className,
   style,
   round,
   onSubmit,
+  className,
   onChoiceSelected: onClick,
 }: RoundProps) => {
   const [optionSelected, setOptionSelected] = useState<number>();
