@@ -46,8 +46,7 @@ const initialMessages = [
     // !Important: The prompt must be a stringified JSON object
     // TODO Add type safety to this somehow
     // Or make it safe for it to not be a stringified JSON object
-    content:
-      "What kind of adventure would you like to go on? You can provide as much or a little detail as you wish.",
+    content: `{"id": 0, "prompt": "What kind of adventure would you like to go on? You can provide as much or a little detail as you wish."}`,
   },
 ] as Message[];
 
@@ -135,7 +134,8 @@ export default function Page() {
           }}
         />
       )}
-      {!isWriting && !latestRound?.options && (
+      {/* // TODO A little weird. Simplify. For now, don't change. */}
+      {!isWriting && latestRound && !latestRound.options && (
         <form
           className="flex flex-col mt-4"
           onSubmit={(e) => {

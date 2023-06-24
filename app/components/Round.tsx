@@ -48,12 +48,7 @@ export const Round = ({
         Storyteller
       </p>
       <div className="mt-2">
-        <p>
-          {round.prompt ||
-            // TODO Ugly, temporary solution for when message contains plain text only (or before JSON) - Delete when relevant
-            (round as unknown as string) ||
-            "Loading..."}
-        </p>
+        <p>{round.prompt || "Loading..."}</p>
         {round.options && (
           <form
             onSubmit={(e) => {
