@@ -10,6 +10,7 @@ type AutogrowingInputProps = {
   className?: string;
   placeholder: string;
   onBlur?: () => void;
+  onFocus?: () => void;
   onEnter?: () => void;
   onChange: (value: any) => void;
 };
@@ -21,10 +22,12 @@ export const AutogrowingInput = ({
   value,
   onBlur,
   onEnter,
+  onFocus,
   onChange,
   className,
   placeholder,
 }: AutogrowingInputProps) => {
+  const [isFocused, setIsFocused] = useState<boolean>(focus || false);
   const [inputValue, setInputValue] = useState<string>(value);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -40,13 +43,13 @@ export const AutogrowingInput = ({
     <div className="AutogrowingInput__container">
       <div
         className="AutogrowingInput"
-        data-replicated-value={inputValue || placeholder}
+        data-replicated-value={isFocused ? "" : inputValue || placeholder}
       >
         <textarea
           ref={inputRef}
           rows={rows ?? 1}
           cols={cols ?? 1}
-          placeholder={placeholder}
+          placeholder={isFocused ? "" : placeholder}
           className={`AutogrowingInput__textarea ${className || ""}`}
           // * Not sure about difference from using onInput
           onChange={(e) => {
@@ -65,12 +68,14 @@ export const AutogrowingInput = ({
           data-lpignore={"true"}
           data-form-type={"other"}
           spellCheck={false}
-          onFocus={(e) =>
+          onFocus={(e) => {
+            setIsFocused(true);
             e.target.setSelectionRange(
               e.target.value.length,
               e.target.value.length
-            )
-          }
+            );
+            onFocus && onFocus();
+          }}
           onBlur={() => {
             onBlur && onBlur();
           }}

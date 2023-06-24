@@ -135,8 +135,7 @@ export default function Page() {
           }}
         />
       )}
-      {/* // TODO A bit confusing. Should be simplified. */}
-      {!isWriting && latestRound && !latestRound.options && (
+      {!isWriting && !latestRound?.options && (
         <form
           className="flex flex-col mt-4"
           onSubmit={(e) => {
