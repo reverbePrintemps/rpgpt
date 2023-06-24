@@ -2,13 +2,14 @@
 
 ## Ongoing
 
+- [ ] Sometimes, the openai API responds with simple text before proceeding with the requested JSON. Handle this case.
+
 ## Backlog
 
 ### Features
 
 ### Bugs
 
-- [ ] Sometimes, the openai API responds with simple text before proceeding with the requested JSON. Take this into account.
 - [ ] Also handle when to show the text input following a prompt better.
 
 ### Tech debt
