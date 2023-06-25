@@ -74,7 +74,7 @@ export default function Page() {
                 input={input}
                 isLoading={isWriting}
                 onChange={(e) => handleInputChange(e)}
-                // placeholders={round.freetext_prompt_placeholders}
+                placeholders={round.freetext_prompt_placeholders}
                 onSubmit={handleFreeTextSubmit}
               />
             )}

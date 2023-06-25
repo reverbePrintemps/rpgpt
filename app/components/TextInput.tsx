@@ -1,5 +1,6 @@
 import { CSSProperties, ChangeEvent, FormEvent } from "react";
 import { AutogrowingInput } from "./AutogrowingInput";
+import { useTypingEffect } from "../utils/typing-effect";
 
 interface TextInputProps {
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -21,14 +22,14 @@ export const TextInput = ({
   style,
 }: TextInputProps) => {
   // TODO: Implement typing effect but careful with "Maximum depth exceeded" error
-  // const typingPlaceholders = useTypingEffect({
-  //   cursor: true,
-  //   typingSpeed: 30,
-  //   repeat: Infinity,
-  //   pauseLength: 1000,
-  //   omitDeletionAnimation: true,
-  //   sequence: placeholders || [],
-  // });
+  const typingPlaceholders = useTypingEffect({
+    cursor: true,
+    typingSpeed: 30,
+    repeat: Infinity,
+    pauseLength: 1000,
+    omitDeletionAnimation: true,
+    sequence: placeholders || ["Type your response here..."],
+  });
 
   return (
     <form
@@ -39,7 +40,7 @@ export const TextInput = ({
       <div className="left-0 flex">
         <AutogrowingInput
           onChange={onChange}
-          placeholder={"Type your response here..."}
+          placeholder={typingPlaceholders}
           value={input || ""}
           onEnter={() =>
             onSubmit &&

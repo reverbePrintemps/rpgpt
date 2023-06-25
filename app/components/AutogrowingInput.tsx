@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-
 import "../styles/AutogrowingInput.css";
 
 type AutogrowingInputProps = {
@@ -18,8 +17,8 @@ type AutogrowingInputProps = {
 export const AutogrowingInput = ({
   rows,
   cols,
-  focus,
   value,
+  focus,
   onBlur,
   onEnter,
   onFocus,
@@ -39,11 +38,35 @@ export const AutogrowingInput = ({
     focus && inputRef.current?.focus();
   }, [focus]);
 
+  const handleFocus = () => {
+    setIsFocused(true);
+    onFocus && onFocus();
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    onBlur && onBlur();
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
+    onChange?.(e);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onEnter && onEnter();
+    }
+  };
+
   return (
     <div className="AutogrowingInput__container">
       <div
         className="AutogrowingInput"
-        data-replicated-value={isFocused ? "" : inputValue || placeholder}
+        data-replicated-value={
+          isFocused ? inputValue : inputValue || placeholder
+        }
       >
         <textarea
           ref={inputRef}
@@ -51,34 +74,16 @@ export const AutogrowingInput = ({
           cols={cols ?? 1}
           placeholder={isFocused ? "" : placeholder}
           className={`AutogrowingInput__textarea ${className || ""}`}
-          // * Not sure about difference from using onInput
-          onChange={(e) => {
-            setInputValue(e.target.value);
-            onChange?.(e);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              onEnter && onEnter();
-            }
-          }}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
           autoFocus={focus}
           value={inputValue}
-          autoComplete={"off"}
-          data-lpignore={"true"}
-          data-form-type={"other"}
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-type="other"
           spellCheck={false}
-          onFocus={(e) => {
-            setIsFocused(true);
-            e.target.setSelectionRange(
-              e.target.value.length,
-              e.target.value.length
-            );
-            onFocus && onFocus();
-          }}
-          onBlur={() => {
-            onBlur && onBlur();
-          }}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       </div>
     </div>

@@ -24,21 +24,16 @@ interface TypeAnimationProps {
 }
 
 export const useTypingEffect = ({
-  sequence: sequenceProp,
+  sequence,
   omitDeletionAnimation,
   typingSpeed,
   pauseLength,
   repeat,
 }: TypeAnimationProps) => {
-  const [sequence, setSequence] = useState(sequenceProp);
   const [stringToType, setStringToType] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopCount, setLoopCount] = useState(0);
   const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    setSequence(sequenceProp);
-  }, [sequenceProp]);
 
   useEffect(() => {
     if (sequence.length === 0) {
