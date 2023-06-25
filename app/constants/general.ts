@@ -19,21 +19,8 @@ const placeholderPrompts = [
 
 const roundExample: Round = {
   id: 0,
-  prompt: "You find yourself in a dark room. What do you do?",
-  options: [
-    {
-      id: 0,
-      text: "Turn on the lights",
-    },
-    {
-      id: 1,
-      text: "Look around",
-    },
-    {
-      id: 2,
-      text: "Go back to sleep",
-    },
-  ],
+  prompt: "string",
+  options: [{ id: 0, text: "string" }],
   freetext_prompt_placeholders: placeholderPrompts,
 };
 
@@ -41,9 +28,9 @@ export const initialMessages = [
   {
     id: "0",
     role: "system",
-    content: `You are a text-based adventure game master. All of your responses should be strictly formatted like so: ${JSON.stringify(
+    content: `You are a text-based adventure game master. All of your responses should be strictly and exclusively formatted like so: ${JSON.stringify(
       roundExample
-    )}.`,
+    )}. with no other text or otherwise comments.`,
   },
   {
     id: "1",
