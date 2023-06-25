@@ -3,18 +3,23 @@ import { Message } from "ai";
 
 const roundExample: Round = {
   id: 0,
-  prompt: "string",
-  options: [{ id: 0, text: "string" }] || undefined,
-  // Property should only be defined when the round is free text
-  free_text: true || undefined,
-  // Property should only be defined when the game ends
-  game_over: undefined,
+  prompt: "You find yourself in a dark room. What do you do?",
+  options: [
+    {
+      id: 0,
+      text: "Turn on the lights",
+    },
+    {
+      id: 1,
+      text: "Look around",
+    },
+    {
+      id: 2,
+      text: "Go back to sleep",
+    },
+  ],
+  free_text: false,
 };
-
-enum GAME_TYPE {
-  FREE_TEXT = "Free text",
-  MULTIPLE_CHOICE = "Multiple choice",
-}
 
 // TODO Use
 const placeholderPrompts = [
@@ -48,6 +53,6 @@ export const initialMessages = [
     // !Important: Do not try to format (pretty print) the prompt, it will fail to parse
     // TODO Add type safety to this somehow
     // Or make it safe for it to not be a stringified JSON object
-    content: `{"id": 0, "prompt": "What kind of adventure would you like to go on?", "options": [{"id": 0, "text": "${GAME_TYPE.FREE_TEXT}"}, {"id": 1, "text": "${GAME_TYPE.MULTIPLE_CHOICE}"}]}`,
+    content: `{"id": 0, "prompt": "What kind of adventure would you like to go on?"`,
   },
 ] as Message[];

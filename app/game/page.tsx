@@ -81,9 +81,14 @@ export default function Page() {
         </Fragment>
       ))}
       {isLoading && (
-        <p className="mt-6 text-xl font-bold border-b-2 pb-1 border-gray-300">
-          Thinking...
-        </p>
+        <>
+          <p className="mt-6 text-xl font-bold border-b-2 pb-1 border-gray-300">
+            Storyteller
+          </p>
+          <div className="mt-2">
+            <p>Loading...</p>
+          </div>
+        </>
       )}
     </div>
   );
