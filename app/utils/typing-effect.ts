@@ -1,5 +1,4 @@
 import { CSSProperties, useEffect, useState } from "react";
-// import "../styles/TypeAnimation.css";
 
 type Enumerate<
   N extends number,
@@ -24,15 +23,12 @@ interface TypeAnimationProps {
   repeat: number;
 }
 
-export const typingEffect = ({
+export const useTypingEffect = ({
+  sequence: sequenceProp,
   omitDeletionAnimation,
   typingSpeed,
   pauseLength,
-  className,
-  sequence: sequenceProp,
-  cursor,
   repeat,
-  style,
 }: TypeAnimationProps) => {
   const [sequence, setSequence] = useState(sequenceProp);
   const [stringToType, setStringToType] = useState("");

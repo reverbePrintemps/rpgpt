@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import "../styles/AutogrowingInput.css";
 
@@ -12,7 +12,7 @@ type AutogrowingInputProps = {
   onBlur?: () => void;
   onFocus?: () => void;
   onEnter?: () => void;
-  onChange: (value: any) => void;
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
 export const AutogrowingInput = ({
@@ -54,7 +54,7 @@ export const AutogrowingInput = ({
           // * Not sure about difference from using onInput
           onChange={(e) => {
             setInputValue(e.target.value);
-            onChange(e);
+            onChange?.(e);
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {

@@ -1,4 +1,4 @@
-import { CSSProperties, useState } from "react";
+import { CSSProperties, FormEvent, useState } from "react";
 import Link from "next/link";
 
 export type Round = {
@@ -13,7 +13,7 @@ export type Round = {
 };
 
 interface RoundProps {
-  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   onChoiceSelected?: (input: string) => void;
   style?: CSSProperties;
   className?: string;
@@ -67,6 +67,15 @@ export const Round = ({
             ))}
           </form>
         )}
+        {/* {!round.options && (
+          <TextInput
+            input={input}
+            placeholders={round.prompt_placeholders}
+            isLoading={false}
+            onChange={onChange}
+            onSubmit={onSubmit}
+          />
+        )} */}
         {round.game_over && (
           <Link
             href="/"
