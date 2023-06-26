@@ -8,7 +8,7 @@ export type Round = {
     id: number;
     text: string;
   }[];
-  freetext_prompt_placeholders?: string[];
+  freetext_prompt_placeholders: string[] | null;
   game_over?: "win" | "lose";
 };
 

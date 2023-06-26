@@ -40,8 +40,9 @@ export const TextInput = ({
       <div className="left-0 flex">
         <AutogrowingInput
           onChange={onChange}
-          placeholder={typingPlaceholders}
+          placeholder={isLoading ? "Loading..." : typingPlaceholders}
           value={input || ""}
+          isLoading={isLoading}
           onEnter={() =>
             onSubmit &&
             onSubmit(

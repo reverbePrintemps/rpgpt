@@ -67,16 +67,18 @@ export default function Page() {
             onSubmit={handleRoundSubmit}
             onChoiceSelected={handleRoundChoiceSelected}
           />
-          {!isWriting &&
-            round.id === rounds[rounds.length - 1].id &&
-            !round.options && (
-              <TextInput
-                input={input}
-                isLoading={isWriting}
-                onChange={(e) => handleInputChange(e)}
-                placeholders={round.freetext_prompt_placeholders}
-                onSubmit={handleFreeTextSubmit}
-              />
+          {round.freetext_prompt_placeholders &&
+            round.id === rounds[rounds.length - 1].id && (
+              <>
+                {round.options && <p>or</p>}
+                <TextInput
+                  input={input}
+                  isLoading={isWriting}
+                  onChange={(e) => handleInputChange(e)}
+                  placeholders={round.freetext_prompt_placeholders}
+                  onSubmit={handleFreeTextSubmit}
+                />
+              </>
             )}
         </Fragment>
       ))}

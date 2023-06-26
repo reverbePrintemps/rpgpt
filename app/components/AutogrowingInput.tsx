@@ -7,6 +7,7 @@ type AutogrowingInputProps = {
   value: string;
   focus?: boolean;
   className?: string;
+  isLoading?: boolean;
   placeholder: string;
   onBlur?: () => void;
   onFocus?: () => void;
@@ -23,6 +24,7 @@ export const AutogrowingInput = ({
   onEnter,
   onFocus,
   onChange,
+  isLoading,
   className,
   placeholder,
 }: AutogrowingInputProps) => {
@@ -73,7 +75,9 @@ export const AutogrowingInput = ({
           rows={rows ?? 1}
           cols={cols ?? 1}
           placeholder={isFocused ? "" : placeholder}
-          className={`AutogrowingInput__textarea ${className || ""}`}
+          className={`AutogrowingInput__textarea ${
+            className || ""
+          } disabled:opacity-50`}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           autoFocus={focus}
@@ -84,6 +88,7 @@ export const AutogrowingInput = ({
           spellCheck={false}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          disabled={isLoading}
         />
       </div>
     </div>

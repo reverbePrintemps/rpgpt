@@ -36,7 +36,7 @@ export const useTypingEffect = ({
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (sequence.length === 0) {
+    if (sequence.length <= 1) {
       return;
     }
 
@@ -52,7 +52,7 @@ export const useTypingEffect = ({
   }, [stringToType, isDeleting, sequence, index, typingSpeed]);
 
   useEffect(() => {
-    if (sequence.length === 0) {
+    if (sequence.length <= 1) {
       return;
     }
 
