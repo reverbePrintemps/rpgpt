@@ -51,11 +51,7 @@ export const Round = ({
   };
 
   return (
-    <div
-      key={round.prompt}
-      className={`${className} mt-6 whitespace-pre-wrap`}
-      style={style}
-    >
+    <div className={`${className} mt-6 whitespace-pre-wrap`} style={style}>
       <p className="text-xl font-bold border-b-2 pb-1 border-gray-300">
         Storyteller
       </p>
@@ -85,7 +81,8 @@ export const Round = ({
             ))}
           </form>
         )}
-        {round.prompt_examples &&
+        {!isLoading &&
+          !!round.prompt_examples?.length &&
           shouldRenderTextInput(roundSubmitted, input) && (
             <>
               {round.options && <p>or</p>}
@@ -108,6 +105,7 @@ export const Round = ({
           </Link>
         )}
       </div>
+      {isLoading && <p className="mt-2">Writing...</p>}
     </div>
   );
 };

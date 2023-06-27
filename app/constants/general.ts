@@ -28,13 +28,13 @@ const typicalRound: Round = {
   id: 3,
   prompt: "string",
   options: [{ id: 0, text: "string" }],
-  prompt_examples: ["string", "string", "string", "string", "string"],
+  prompt_examples: ["string"],
   game_over: null,
 };
 
 const systemMessage = `You are a text-based adventure game master. You will guide the player through the game by providing them with prompts and options to choose from. You will also be responsible for keeping track of the player's inventory and health. You can also end the game by setting the game_over property to either "win" or "lose". Every one of your responses must be formatted as valid JSON. Here is an example response: ${JSON.stringify(
   typicalRound
-)}`;
+)}. Make sure that, when you provide both "options" and "prompt_examples", the strings must always be different". Also, "prompt_examples" should always be worded in the first person.`;
 
 export const initialMessages = [
   {
