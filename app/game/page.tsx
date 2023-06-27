@@ -1,8 +1,8 @@
 "use client";
-import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
-import { forceParse, scrollToBottom } from "../utils/general";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { initialMessages } from "../constants/general";
-import { TextInput } from "../components/TextInput";
+import { scrollToBottom } from "../utils/scrolling";
+import { forceParse } from "../utils/parsing";
 import { Round } from "../components/Round";
 import { useChat } from "ai/react";
 
@@ -17,7 +17,6 @@ export default function Page() {
     handleSubmit,
     messages,
     setInput,
-    input,
   } = useChat({
     initialMessages,
     onResponse: () => {
@@ -26,9 +25,9 @@ export default function Page() {
   });
 
   useEffect(() => {
-    process.env.NODE_ENV === "development" && console.log("messages", messages);
     const latestMessage = messages[messages.length - 1];
-    const parsed = forceParse(latestMessage.content) as Round;
+    const latestRound = latestMessage.content;
+    const parsed = forceParse(latestRound) as Round;
     if (parsed) {
       setRounds((prevRounds) => {
         if (prevRounds[prevRounds.length - 1]?.id === parsed.id) {
@@ -52,35 +51,18 @@ export default function Page() {
     handleSubmit(e);
   };
 
-  const handleFreeTextSubmit = (e: FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
-    handleSubmit(e);
-  };
-
   return (
     <div ref={ref} className="scroll-m-52">
       <h1 className="text-5xl font-bold">Game</h1>
       {rounds.map((round) => (
-        <Fragment key={round.id}>
-          <Round
-            round={round}
-            onSubmit={handleRoundSubmit}
-            onChoiceSelected={handleRoundChoiceSelected}
-          />
-          {round.freetext_prompt_placeholders &&
-            round.id === rounds[rounds.length - 1].id && (
-              <>
-                {round.options && <p>or</p>}
-                <TextInput
-                  input={input}
-                  isLoading={isWriting}
-                  onChange={(e) => handleInputChange(e)}
-                  placeholders={round.freetext_prompt_placeholders}
-                  onSubmit={handleFreeTextSubmit}
-                />
-              </>
-            )}
-        </Fragment>
+        <Round
+          key={round.id}
+          round={round}
+          onSubmit={handleRoundSubmit}
+          onChoiceSelected={handleRoundChoiceSelected}
+          onTextInputChange={handleInputChange}
+          isLoading={isWriting}
+        />
       ))}
       {isLoading && (
         <>

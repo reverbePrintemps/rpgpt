@@ -1,4 +1,4 @@
-import { forceParse } from "../utils/general";
+import { forceParse } from "../utils/parsing";
 
 describe("forceParse", () => {
   it("should return valid JSON", () => {

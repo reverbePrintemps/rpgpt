@@ -1,6 +1,6 @@
 import { CSSProperties, ChangeEvent, FormEvent } from "react";
-import { AutogrowingInput } from "./AutogrowingInput";
 import { useTypingEffect } from "../utils/typing-effect";
+import { AutogrowingInput } from "./AutogrowingInput";
 
 interface TextInputProps {
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -9,6 +9,7 @@ interface TextInputProps {
   style?: CSSProperties;
   isLoading?: boolean;
   className?: string;
+  disabled?: boolean;
   input?: string;
 }
 
@@ -18,6 +19,7 @@ export const TextInput = ({
   className,
   onSubmit,
   onChange,
+  disabled,
   input,
   style,
 }: TextInputProps) => {
@@ -43,6 +45,7 @@ export const TextInput = ({
           placeholder={isLoading ? "Loading..." : typingPlaceholders}
           value={input || ""}
           isLoading={isLoading}
+          disabled={disabled}
           onEnter={() =>
             onSubmit &&
             onSubmit(
@@ -56,7 +59,7 @@ export const TextInput = ({
         <button
           className="bg-slate-300 text-stone-800 p-2 rounded-lg ml-4 font-bold disabled:opacity-50"
           type="submit"
-          disabled={isLoading || input === ""}
+          disabled={disabled || isLoading || input === ""}
         >
           Send
         </button>

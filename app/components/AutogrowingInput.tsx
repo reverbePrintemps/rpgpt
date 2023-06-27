@@ -7,6 +7,7 @@ type AutogrowingInputProps = {
   value: string;
   focus?: boolean;
   className?: string;
+  disabled?: boolean;
   isLoading?: boolean;
   placeholder: string;
   onBlur?: () => void;
@@ -24,6 +25,7 @@ export const AutogrowingInput = ({
   onEnter,
   onFocus,
   onChange,
+  disabled,
   isLoading,
   className,
   placeholder,
@@ -88,7 +90,7 @@ export const AutogrowingInput = ({
           spellCheck={false}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          disabled={isLoading}
+          disabled={disabled || isLoading}
         />
       </div>
     </div>

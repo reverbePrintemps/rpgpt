@@ -1,33 +1,55 @@
-import { CSSProperties, FormEvent, useState } from "react";
+import { CSSProperties, ChangeEvent, FormEvent, useState } from "react";
+import { TextInput } from "./TextInput";
 import Link from "next/link";
 
 export type Round = {
   id: number;
   prompt: string;
-  options?: {
-    id: number;
-    text: string;
-  }[];
-  freetext_prompt_placeholders: string[] | null;
-  game_over?: "win" | "lose";
+  options:
+    | {
+        id: number;
+        text: string;
+      }[]
+    | null;
+  prompt_examples: string[] | null;
+  game_over: "win" | "lose" | null;
 };
 
 interface RoundProps {
+  onTextInputChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   onChoiceSelected?: (input: string) => void;
   style?: CSSProperties;
+  isLoading?: boolean;
   className?: string;
   round: Round;
 }
+
+const shouldRenderTextInput = (roundSubmitted: boolean, input: string) => {
+  return !!input.length || !roundSubmitted;
+};
 
 export const Round = ({
   style,
   round,
   onSubmit,
   className,
+  isLoading,
+  onTextInputChange,
   onChoiceSelected: onClick,
 }: RoundProps) => {
+  const [input, setInput] = useState("");
   const [optionSelected, setOptionSelected] = useState<number>();
+  const [roundSubmitted, setRoundSubmitted] = useState(false);
+  const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+    onTextInputChange?.(e);
+  };
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    onSubmit?.(e);
+    setRoundSubmitted(true);
+  };
+
   return (
     <div
       key={round.prompt}
@@ -40,11 +62,7 @@ export const Round = ({
       <div className="mt-2">
         <p>{round.prompt || "Loading..."}</p>
         {round.options && (
-          <form
-            onSubmit={(e) => {
-              onSubmit?.(e);
-            }}
-          >
+          <form onSubmit={handleOnSubmit}>
             {round.options.map((o) => (
               <button
                 key={o.id}
@@ -60,22 +78,27 @@ export const Round = ({
                 }}
                 // No basic tailwind for this
                 style={{ minHeight: "40px" }}
-                disabled={optionSelected !== undefined}
+                disabled={roundSubmitted}
               >
                 {o.text}
               </button>
             ))}
           </form>
         )}
-        {/* {!round.options && (
-          <TextInput
-            input={input}
-            placeholders={round.prompt_placeholders}
-            isLoading={false}
-            onChange={onChange}
-            onSubmit={onSubmit}
-          />
-        )} */}
+        {round.prompt_examples &&
+          shouldRenderTextInput(roundSubmitted, input) && (
+            <>
+              {round.options && <p>or</p>}
+              <TextInput
+                input={input}
+                isLoading={isLoading}
+                onChange={handleOnChange}
+                placeholders={round.prompt_examples}
+                onSubmit={handleOnSubmit}
+                disabled={roundSubmitted}
+              />
+            </>
+          )}
         {round.game_over && (
           <Link
             href="/"

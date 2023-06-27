@@ -1,7 +1,7 @@
 import { Round } from "../components/Round";
 import { Message } from "ai";
 
-const placeholderPrompts = [
+const promptExamples = [
   "Like Lord of the Rings, but with cats.",
   "I'm a wizard in a post-apocalyptic world.",
   "What if Back to the Future was a horror movie?",
@@ -16,32 +16,24 @@ const placeholderPrompts = [
   "My power is to eat anything and gain its power.",
 ];
 
-const genericRoundExample: Round = {
-  id: 0,
+const initialRound: Round = {
+  id: 1,
+  prompt: "What kind of adventure would you like to go on?",
+  prompt_examples: promptExamples,
+  options: null,
+  game_over: null,
+};
+
+const typicalRound: Round = {
+  id: 3,
   prompt: "string",
   options: [{ id: 0, text: "string" }],
-  freetext_prompt_placeholders: placeholderPrompts,
-  game_over: undefined,
+  prompt_examples: ["string", "string", "string", "string", "string"],
+  game_over: null,
 };
 
-const finalRoundExample: Round = {
-  id: 0,
-  prompt: "string",
-  options: undefined,
-  freetext_prompt_placeholders: null,
-  game_over: "win",
-};
-
-const initialRound: Round = {
-  id: 0,
-  prompt: "What kind of adventure would you like to go on?",
-  freetext_prompt_placeholders: placeholderPrompts,
-};
-
-const systemMessage = `You are a text-based adventure game master. All of your responses should be strictly and exclusively formatted like so: ${JSON.stringify(
-  genericRoundExample
-)}. with no other text or otherwise comments. A game should last no longer than 3 rounds. A final round should always include a "game_over" property with the value of either "win" or "lose". Here's an example of a last round: ${JSON.stringify(
-  finalRoundExample
+const systemMessage = `You are a text-based adventure game master. You will guide the player through the game by providing them with prompts and options to choose from. You will also be responsible for keeping track of the player's inventory and health. You can also end the game by setting the game_over property to either "win" or "lose". Every one of your responses must be formatted as valid JSON. Here is an example response: ${JSON.stringify(
+  typicalRound
 )}`;
 
 export const initialMessages = [
