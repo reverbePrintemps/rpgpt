@@ -40,6 +40,7 @@ export default function Page() {
       });
     }
     scrollToBottom(ref, "smooth", "end");
+    process.env.NODE_ENV === "development" && console.log("messages", messages);
   }, [messages]);
 
   const handleRoundChoiceSelected = (input: string) => {
@@ -52,8 +53,8 @@ export default function Page() {
   };
 
   return (
-    <div ref={ref} className="scroll-m-52">
-      <h1 className="text-5xl font-bold">Game</h1>
+    <div ref={ref} className="prose scroll-m-52">
+      <h1>Game</h1>
       {rounds.map((round) => {
         const latestRound = rounds[rounds.length - 1];
         return (

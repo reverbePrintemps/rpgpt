@@ -57,7 +57,7 @@ export const TextInput = ({
           }
         />
         <button
-          className="bg-slate-300 text-stone-800 p-2 rounded-lg ml-4 font-bold disabled:opacity-50"
+          className="btn btn-primary ml-4 disabled:opacity-50"
           type="submit"
           disabled={disabled || isLoading || input === ""}
         >

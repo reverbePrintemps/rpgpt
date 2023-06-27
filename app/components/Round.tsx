@@ -1,4 +1,11 @@
-import { CSSProperties, ChangeEvent, FormEvent, useState } from "react";
+import {
+  CSSProperties,
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useState,
+} from "react";
+import { Theme } from "../constants/theme";
 import { TextInput } from "./TextInput";
 import Link from "next/link";
 
@@ -13,6 +20,7 @@ export type Round = {
     | null;
   prompt_examples: string[] | null;
   game_over: "win" | "lose" | null;
+  ui_theme: Theme;
 };
 
 interface RoundProps {
@@ -50,6 +58,13 @@ export const Round = ({
     setRoundSubmitted(true);
   };
 
+  useEffect(() => {
+    if (round.ui_theme)
+      window.document
+        .querySelector("html")
+        ?.setAttribute("data-theme", round.ui_theme);
+  }, [round]);
+
   return (
     <div className={`${className} mt-6 whitespace-pre-wrap`} style={style}>
       <p className="text-xl font-bold border-b-2 pb-1 border-gray-300">
@@ -63,18 +78,20 @@ export const Round = ({
               <button
                 key={o.id}
                 type="submit"
-                className={`${
-                  optionSelected === o.id ? "bg-slate-300" : "bg-stone-400"
+                className={`btn btn-secondary normal-case ${
+                  optionSelected === o.id && "btn-info"
                 }
-              ${optionSelected === undefined && "hover:bg-stone-600"}
-              text-stone-800 p-2 rounded-lg m-2 ml-auto text-left disabled:opacity-40`}
+               m-2 ml-auto text-left ${
+                 roundSubmitted ? "opacity-30" : "opacity-100"
+               }`}
                 onClick={() => {
                   onClick?.(o.text);
                   setOptionSelected(o.id);
                 }}
                 // No basic tailwind for this
                 style={{ minHeight: "40px" }}
-                disabled={roundSubmitted}
+                // TODO Use actual disabled state but override styles because not very accessible by default
+                // disabled={roundSubmitted}
               >
                 {o.text}
               </button>
@@ -105,7 +122,9 @@ export const Round = ({
           </Link>
         )}
       </div>
-      {isLoading && <p className="mt-2">Writing...</p>}
+      {isLoading && (
+        <span className="loading loading-spinner loading-sm mt-2" />
+      )}
     </div>
   );
 };

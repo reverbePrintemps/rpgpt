@@ -1,4 +1,4 @@
-import { Header } from "./components/Header";
+import { Navbar } from "./components/Header";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
@@ -12,10 +12,12 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="bg-stone-800 text-slate-300">
+    <html lang="en" data-theme="light">
       <body className={inter.className}>
-        <Header />
-        <div className="flex flex-col w-full max-w-md pt-20 pb-40 mx-auto stretch px-4">
+        <header>
+          <Navbar />
+        </header>
+        <div className="flex flex-col w-full max-w-md mx-auto stretch px-4 pt-10 pb-40">
           {children}
         </div>
       </body>

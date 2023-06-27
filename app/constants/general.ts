@@ -1,4 +1,5 @@
 import { Round } from "../components/Round";
+import { Theme } from "./theme";
 import { Message } from "ai";
 
 const promptExamples = [
@@ -22,6 +23,7 @@ const initialRound: Round = {
   prompt_examples: promptExamples,
   options: null,
   game_over: null,
+  ui_theme: Theme.light,
 };
 
 const typicalRound: Round = {
@@ -30,11 +32,44 @@ const typicalRound: Round = {
   options: [{ id: 0, text: "string" }],
   prompt_examples: ["string"],
   game_over: null,
+  ui_theme: Theme.forest,
 };
 
-const systemMessage = `You are a text-based adventure game master. You will guide the player through the game by providing them with prompts and options to choose from. You will also be responsible for keeping track of the player's inventory and health. You can also end the game by setting the game_over property to either "win" or "lose". Every one of your responses must be formatted as valid JSON. Here is an example response: ${JSON.stringify(
+const getPropertyName = <T extends object>(
+  o: T,
+  expression: (x: { [Property in keyof T]: string }) => string
+) => {
+  const res = {} as { [Property in keyof T]: string };
+  Object.keys(o).map((k) => (res[k as keyof T] = k));
+  return expression(res);
+};
+
+type StringValuesType = {
+  [K in keyof Round]: string;
+};
+
+const roundProperties = {
+  id: getPropertyName(typicalRound, (x) => x.id),
+  prompt: getPropertyName(typicalRound, (x) => x.prompt),
+  options: getPropertyName(typicalRound, (x) => x.options),
+  prompt_examples: getPropertyName(typicalRound, (x) => x.prompt_examples),
+  game_over: getPropertyName(typicalRound, (x) => x.game_over),
+  ui_theme: getPropertyName(typicalRound, (x) => x.ui_theme),
+} satisfies StringValuesType;
+
+const themeValuesString: string = Object.values(Theme)
+  .map((value) => `"${value}"`)
+  .join(", ");
+
+const systemMessage = `You are a text-based adventure game master. You will guide the player through the game by providing them with prompts and options to choose from. You will also be responsible for keeping track of the player's inventory and health. You can also end the game by setting the game_over property to either "win" or "lose". Every one of your responses must be formatted as valid JSON. Here is an example response: "${JSON.stringify(
   typicalRound
-)}. Make sure that, when you provide both "options" and "prompt_examples", the strings must always be different". Also, "prompt_examples" should always be worded in the first person.`;
+)}". Make sure that, when you provide both "${roundProperties.options}" and "${
+  roundProperties.prompt_examples
+}", these must be different from each other and have no overlap. Also, "${
+  roundProperties.prompt_examples
+}" should always be worded in the first person. The value for the "${
+  roundProperties.ui_theme
+}" property can only be one of the following values: ${themeValuesString} but should adapt to the environment in which the player finds itself with each round.`;
 
 export const initialMessages = [
   {

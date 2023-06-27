@@ -9,21 +9,18 @@ interface HeaderProps {
   style?: CSSProperties;
 }
 
-export const Header = ({ children, className, style }: HeaderProps) => {
+export const Navbar = ({ children, className, style }: HeaderProps) => {
   const pathName = usePathname();
   return (
-    <header className="fixed w-screen flex p-4 bg-slate-300 text-stone-800 z-10">
-      <nav>
-        {pathName !== "/" && (
-          <Link
-            href="/"
-            className="mr-4 bg-stone-800 text-slate-300 p-2 rounded-lg"
-          >
-            <button>Back</button>
-          </Link>
-        )}
-      </nav>
-      <h1 className="ml-auto font-bold">rpgpt.</h1>
-    </header>
+    <nav className="navbar bg-neutral text-neutral-content">
+      {pathName !== "/" && (
+        <Link href="/">
+          <button className="btn btn-neutral normal-case">Back</button>
+        </Link>
+      )}
+      <button className="btn btn-ghost normal-case text-xl ml-auto">
+        rpgpt.
+      </button>
+    </nav>
   );
 };

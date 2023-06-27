@@ -67,7 +67,7 @@ export const AutogrowingInput = ({
   return (
     <div className="AutogrowingInput__container">
       <div
-        className="AutogrowingInput"
+        className="AutogrowingInput textarea textarea-bordered"
         data-replicated-value={
           isFocused ? inputValue : inputValue || placeholder
         }
@@ -79,7 +79,7 @@ export const AutogrowingInput = ({
           placeholder={isFocused ? "" : placeholder}
           className={`AutogrowingInput__textarea ${
             className || ""
-          } disabled:opacity-50`}
+          } disabled:opacity-50 textarea textarea-bordered textarea-primary`}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           autoFocus={focus}
