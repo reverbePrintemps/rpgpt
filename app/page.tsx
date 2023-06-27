@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Page() {
   return (
-    <div className="hero min-h-screen">
+    <div className="hero">
       <div className="hero-content">
         <div className="max-w-md flex flex-col">
           <h1 className="text-5xl font-bold">rpgpt.</h1>

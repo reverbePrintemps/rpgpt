@@ -16,4 +16,6 @@ export enum Theme {
   night = "night",
   winter = "winter",
   valentine = "valentine",
+  halloween = "halloween",
+  dracula = "dracula",
 }

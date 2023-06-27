@@ -1,6 +1,6 @@
 "use client";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { initialMessages } from "../constants/general";
+import { initialMessages } from "../constants/prompt";
 import { scrollToBottom } from "../utils/scrolling";
 import { forceParse } from "../utils/parsing";
 import { Round } from "../components/Round";

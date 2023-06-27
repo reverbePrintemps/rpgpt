@@ -35,7 +35,7 @@ export const TextInput = ({
 
   return (
     <form
-      className={`${className} flex flex-col mt-4`}
+      className={`${className || ""} flex flex-col mt-4`}
       onSubmit={onSubmit}
       style={style}
     >

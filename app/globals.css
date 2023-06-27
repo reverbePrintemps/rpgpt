@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Transition when changing the daisyUI theme */
+[data-theme] {
+  transition: all 1s ease-in-out;
+}

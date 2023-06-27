@@ -17,22 +17,24 @@ const promptExamples = [
   "My power is to eat anything and gain its power.",
 ];
 
+// * Order of properties is related to order in which they are responded to by the model
 const initialRound: Round = {
   id: 1,
+  ui_theme: Theme.light,
   prompt: "What kind of adventure would you like to go on?",
   prompt_examples: promptExamples,
   options: null,
   game_over: null,
-  ui_theme: Theme.light,
 };
 
+// * Order of properties is related to order in which they are responded to by the model
 const typicalRound: Round = {
   id: 3,
+  ui_theme: Theme.forest,
   prompt: "string",
-  options: [{ id: 0, text: "string" }],
+  options: [{ id: 0, text: "string", ui_theme: Theme.forest }],
   prompt_examples: ["string"],
   game_over: null,
-  ui_theme: Theme.forest,
 };
 
 const getPropertyName = <T extends object>(
@@ -61,15 +63,18 @@ const themeValuesString: string = Object.values(Theme)
   .map((value) => `"${value}"`)
   .join(", ");
 
+// TODO: Extent type safety to include nested properties (currently options.ui_theme is not type checked)
 const systemMessage = `You are a text-based adventure game master. You will guide the player through the game by providing them with prompts and options to choose from. You will also be responsible for keeping track of the player's inventory and health. You can also end the game by setting the game_over property to either "win" or "lose". Every one of your responses must be formatted as valid JSON. Here is an example response: "${JSON.stringify(
   typicalRound
 )}". Make sure that, when you provide both "${roundProperties.options}" and "${
   roundProperties.prompt_examples
 }", these must be different from each other and have no overlap. Also, "${
   roundProperties.prompt_examples
-}" should always be worded in the first person. The value for the "${
+}" should always be worded in the first person. For each round, you will return a "${
   roundProperties.ui_theme
-}" property can only be one of the following values: ${themeValuesString} but should adapt to the environment in which the player finds itself with each round.`;
+}" property which should match the contents of the prompt. Each option should also have a "${
+  roundProperties.ui_theme
+}" property which should match the contents of the option. The available themes are: ${themeValuesString}.`;
 
 export const initialMessages = [
   {
