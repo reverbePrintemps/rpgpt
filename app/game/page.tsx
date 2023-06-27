@@ -54,7 +54,7 @@ export default function Page() {
 
   return (
     <div ref={ref} className="prose scroll-m-52">
-      <h1>Game</h1>
+      <h2>Game</h2>
       {rounds.map((round) => {
         const latestRound = rounds[rounds.length - 1];
         return (

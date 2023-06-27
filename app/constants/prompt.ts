@@ -66,9 +66,9 @@ const themeValuesString: string = Object.values(Theme)
 // TODO: Extent type safety to include nested properties (currently options.ui_theme is not type checked)
 const systemMessage = `You are a text-based adventure game master. You will guide the player through the game by providing them with prompts and options to choose from. You will also be responsible for keeping track of the player's inventory and health. You can also end the game by setting the game_over property to either "win" or "lose". Every one of your responses must be formatted as valid JSON. Here is an example response: "${JSON.stringify(
   typicalRound
-)}". Make sure that, when you provide both "${roundProperties.options}" and "${
+)}". Make sure that, when providing both "${roundProperties.options}" and "${
   roundProperties.prompt_examples
-}", these must be different from each other and have no overlap. Also, "${
+}", these must offer different actions from each other and must not overlap. Also, "${
   roundProperties.prompt_examples
 }" should always be worded in the first person. For each round, you will return a "${
   roundProperties.ui_theme

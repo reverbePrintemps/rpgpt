@@ -78,13 +78,14 @@ export const Round = ({
       className={`${className || ""} mt-6 whitespace-pre-wrap`}
       style={style}
     >
-      <p className="text-xl font-bold border-b-2 pb-1 border-gray-300">
-        Storyteller
-      </p>
+      <div className="divider prose">
+        <h3>Storyteller</h3>
+      </div>
       <div className="mt-2">
         <p>{round.prompt || "Loading..."}</p>
+
         {round.options && (
-          <form onSubmit={handleOnSubmit}>
+          <form className="flex flex-wrap" onSubmit={handleOnSubmit}>
             {round.options.map((o) => (
               <button
                 key={o.id}
@@ -92,15 +93,13 @@ export const Round = ({
                 className={`btn btn-secondary normal-case ${
                   optionSelected?.id === o.id ? "btn-info" : ""
                 }
-               m-2 ml-auto text-left ${
-                 roundSubmitted ? "opacity-30" : "opacity-100"
-               }`}
+               m-2 text-left ${roundSubmitted ? "opacity-30" : ""}`}
                 onClick={() => {
                   onClick?.(o.text);
                   setOptionSelected(o);
                 }}
                 // TODO Use actual disabled state but override styles because not very accessible by default
-                // disabled={roundSubmitted}
+                // disabled={isLoading || roundSubmitted}
               >
                 {o.text}
               </button>
@@ -111,7 +110,7 @@ export const Round = ({
           !!round.prompt_examples?.length &&
           shouldRenderTextInput(roundSubmitted, input) && (
             <>
-              {round.options && <p>or</p>}
+              {round.options && <div className="divider">or</div>}
               <TextInput
                 input={input}
                 isLoading={isLoading}
@@ -132,7 +131,9 @@ export const Round = ({
         )}
       </div>
       {isLoading && (
-        <span className="loading loading-spinner loading-sm mt-2" />
+        <div className="w-full flex justify-center">
+          <span className="loading loading-spinner loading-sm mt-4" />
+        </div>
       )}
     </div>
   );
