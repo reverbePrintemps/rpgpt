@@ -83,7 +83,6 @@ export const Round = ({
       </div>
       <div className="mt-2">
         <p>{round.prompt || "Loading..."}</p>
-
         {round.options && (
           <form className="flex flex-wrap" onSubmit={handleOnSubmit}>
             {round.options.map((o) => (
@@ -115,9 +114,9 @@ export const Round = ({
                 input={input}
                 isLoading={isLoading}
                 onChange={handleOnChange}
-                placeholders={round.prompt_examples}
+                placeholders={["Out of order"]}
                 onSubmit={handleOnSubmit}
-                disabled={roundSubmitted}
+                disabled={true}
               />
             </>
           )}
