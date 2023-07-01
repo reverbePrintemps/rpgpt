@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { Navbar } from "./components/Header";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </header>
         <div className="flex flex-col w-full max-w-md mx-auto stretch px-4 pt-10 pb-40">
           {children}
+          <Analytics />
         </div>
       </body>
     </html>
