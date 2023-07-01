@@ -53,8 +53,8 @@ export default function Page() {
   };
 
   return (
-    <div ref={ref} className="prose scroll-m-52">
-      <h2>Game</h2>
+    <div ref={ref} className="scroll-m-52 w-full">
+      <h2 className="font-bold text-2xl">Game</h2>
       {rounds.map((round) => {
         const latestRound = rounds[rounds.length - 1];
         return (

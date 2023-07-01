@@ -78,8 +78,8 @@ export const Round = ({
       className={`${className || ""} mt-6 whitespace-pre-wrap`}
       style={style}
     >
-      <div className="divider prose">
-        <h3>Storyteller</h3>
+      <div className="divider">
+        <h3 className="font-semibold text-xl">Storyteller</h3>
       </div>
       <div className="mt-2">
         <p>{round.prompt || "Loading..."}</p>
@@ -114,9 +114,9 @@ export const Round = ({
                 input={input}
                 isLoading={isLoading}
                 onChange={handleOnChange}
-                placeholders={["Out of order"]}
+                placeholders={round.prompt_examples}
                 onSubmit={handleOnSubmit}
-                disabled={true}
+                disabled={roundSubmitted}
               />
             </>
           )}
