@@ -14,8 +14,8 @@ export async function POST(req: Request) {
 
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    // Seems good for now. Increase if options are being cut short.
-    max_tokens: 300,
+    // For whole convo, not per message. Increase if games keep getting cut short.
+    max_tokens: 1000,
     stream: true,
     messages,
   });
