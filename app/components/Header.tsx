@@ -134,7 +134,7 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
               <span className="loading loading-spinner loading-sm mt-4" />
             )}
             {usage && hardLimit && (
-              <div className="stats bg-info mt-4">
+              <div className="stats bg-info mt-4 self-center">
                 <div className="stat">
                   <div className="stat-title text-neutral">Current usage</div>
                   <div className="stat-value text-error-content">${usage}</div>
