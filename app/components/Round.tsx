@@ -29,10 +29,13 @@ interface RoundProps {
   onTextInputChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   onChoiceSelected?: (input: string) => void;
+  onTryAgain?: () => void;
   style?: CSSProperties;
   latestRound?: boolean;
+  isFinished?: boolean;
   isLoading?: boolean;
   className?: string;
+  error?: Error;
   round: Round;
 }
 
@@ -43,9 +46,12 @@ const shouldRenderTextInput = (roundSubmitted: boolean, input: string) => {
 export const Round = ({
   style,
   round,
+  error,
   onSubmit,
   className,
   isLoading,
+  isFinished,
+  onTryAgain,
   latestRound,
   onTextInputChange,
   onChoiceSelected: onClick,
@@ -151,6 +157,35 @@ export const Round = ({
           <span className="loading loading-spinner loading-sm mt-4" />
         </div>
       )}
+      {!round.options?.length &&
+        !round.prompt_examples?.length &&
+        isFinished &&
+        error && (
+          <div className="alert alert-error mt-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>Oh no! Something went wrong.</span>
+            <div className="flex">
+              <button className="btn btn-primary" onClick={onTryAgain}>
+                Try again
+              </button>
+              <Link href="/" className="btn btn-secondary ml-4">
+                New game
+              </Link>
+            </div>
+          </div>
+        )}
     </div>
   );
 };

@@ -39,7 +39,7 @@ export const TextInput = ({
       onSubmit={onSubmit}
       style={style}
     >
-      <div className="left-0 flex">
+      <div className="flex items-end">
         <AutogrowingInput
           onChange={onChange}
           placeholder={isLoading ? "Loading..." : typingPlaceholders}

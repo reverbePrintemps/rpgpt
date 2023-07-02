@@ -46,8 +46,8 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
               Due to a sudden increase in popularity, I find myself unable to
               continue incurring the maintenance costs for rpgpt for much
               longer. If you enjoy rpgpt and would like to ensure its continued
-              existence, please consider making a small donation and buying me a
-              tea. ❤️
+              existence and further development, please consider making a small
+              donation by buying me a tea. ❤️
             </p>
             <div className="flex mt-4">
               <button
