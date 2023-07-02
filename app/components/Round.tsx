@@ -30,6 +30,7 @@ interface RoundProps {
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   onChoiceSelected?: (input: string) => void;
   style?: CSSProperties;
+  latestRound?: boolean;
   isLoading?: boolean;
   className?: string;
   round: Round;
@@ -45,6 +46,7 @@ export const Round = ({
   onSubmit,
   className,
   isLoading,
+  latestRound,
   onTextInputChange,
   onChoiceSelected: onClick,
 }: RoundProps) => {
@@ -124,17 +126,17 @@ export const Round = ({
               />
             </>
           )}
-        {round.game_over && (
+        {latestRound && round.game_over && (
           <>
             <Link href="/">
               <button className="btn btn-primary mt-8">New adventure</button>
             </Link>
             <div className="mt-4">
               <p className="prose">
-                You enjoyed your adventure or would like to report an issue?
-                Come join us on Discord!
+                Enjoyed your adventure or have some feedback to share? Join our
+                Discord!
               </p>
-              <Link href="https://discord.gg/a22fWPUgQ">
+              <Link href="https://discord.gg/a22fWPUgQ" target="_blank">
                 <button className="btn btn-secondary mt-4">
                   <DiscordLogo style={{ fill: "#5965f2" }} />
                   Join our Discord

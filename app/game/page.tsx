@@ -56,15 +56,16 @@ export default function Page() {
     <div ref={ref} className="scroll-m-52 w-full">
       <h2 className="font-bold text-2xl">Game</h2>
       {rounds.map((round) => {
-        const latestRound = rounds[rounds.length - 1];
+        const latestRound = rounds[rounds.length - 1].id === round.id;
         return (
           <Round
             key={round.id}
             round={round}
+            latestRound={latestRound}
             onSubmit={handleRoundSubmit}
             onChoiceSelected={handleRoundChoiceSelected}
             onTextInputChange={handleInputChange}
-            isLoading={round.id === latestRound.id && isWriting}
+            isLoading={latestRound && isWriting}
           />
         );
       })}
