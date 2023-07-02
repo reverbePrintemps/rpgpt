@@ -11,16 +11,12 @@ interface HeaderProps {
 
 const getStartOfCurrentMonth = () => {
   const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), 1)
-    .toISOString()
-    .split("T")[0];
+  return new Date(now.getFullYear(), now.getMonth());
 };
 
 const getEndOfCurrentMonth = () => {
   const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth() + 1, 0)
-    .toISOString()
-    .split("T")[0];
+  return new Date(now.getFullYear(), now.getMonth() + 1, 0);
 };
 
 export const Navbar = ({ children, className, style }: HeaderProps) => {
@@ -63,7 +59,9 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
     };
     const getUsage = async () => {
       const res = await fetch(
-        `https://api.openai.com/dashboard/billing/usage?end_date=${getEndOfCurrentMonth()}&start_date=${getStartOfCurrentMonth()}`,
+        `https://api.openai.com/dashboard/billing/usage?end_date=${
+          getEndOfCurrentMonth().toISOString().split("T")[0]
+        }&start_date=${getStartOfCurrentMonth().toISOString().split("T")[0]}`,
         {
           credentials: "omit",
           headers: {
@@ -139,8 +137,10 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
                   <div className="stat-title text-neutral">Current usage</div>
                   <div className="stat-value text-error-content">${usage}</div>
                   <div className="stat-desc text-neutral">
-                    <div>From {getStartOfCurrentMonth()} </div>
-                    <div>to {getEndOfCurrentMonth()}</div>
+                    <div>
+                      From {getStartOfCurrentMonth().toLocaleDateString()}{" "}
+                    </div>
+                    <div>to {getEndOfCurrentMonth().toLocaleDateString()}</div>
                   </div>
                 </div>
                 <div className="stat">
