@@ -27,7 +27,7 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
         </button>
       </div>
       {shouldShowBanner && (
-        <div className="alert alert-warning mt-2 flex max-w-4xl">
+        <div className="alert alert-warning mt-2 flex flex-col sm:flex-row max-w-4xl">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="stroke-current shrink-0 h-6 w-6"
@@ -42,10 +42,12 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
             />
           </svg>
           <div className="flex flex-col items-end">
-            <p className="ml-2">
-              Due to a sudden and unexpected increase in popularity for this
-              app, I am unable to incur the api costs for much longer. Consider
-              donating to help keep this app alive. ❤️
+            <p className="ml-2 text-left">
+              Due to a sudden increase in popularity, I find myself unable to
+              continue incurring the maintenance costs for rpgpt for much
+              longer. If you enjoy rpgpt and would like to ensure its continued
+              existence, please consider making a small donation and buying me a
+              tea. ❤️
             </p>
             <div className="flex mt-4">
               <button
@@ -59,7 +61,9 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
                 target="_blank"
                 className="block"
               >
-                <button className="btn btn-md btn-primary">Donate</button>
+                <button className="btn btn-md btn-primary ml-2">
+                  🍵 Buy me a tea
+                </button>
               </Link>
             </div>
           </div>
