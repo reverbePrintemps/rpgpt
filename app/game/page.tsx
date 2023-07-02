@@ -70,9 +70,9 @@ export default function Page() {
       })}
       {isLoading && (
         <>
-          <p className="mt-6 text-xl font-bold border-b-2 pb-1 border-gray-300">
-            Storyteller
-          </p>
+          <div className="divider">
+            <h3 className="font-semibold text-xl">Storyteller</h3>
+          </div>
           <div className="mt-2">
             <p>Loading...</p>
           </div>

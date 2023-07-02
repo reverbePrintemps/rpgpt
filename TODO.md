@@ -2,6 +2,8 @@
 
 ## Ongoing
 
+- [ ] Option buttons don't wrap, causing longer options to extend the width of the screen. 🤦
+
 ## Backlog
 
 ### Features
