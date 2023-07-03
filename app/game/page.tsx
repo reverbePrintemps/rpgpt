@@ -5,7 +5,6 @@ import { scrollToBottom } from "../utils/scrolling";
 import { forceParse } from "../utils/parsing";
 import { Round } from "../components/Round";
 import { useChat } from "ai/react";
-import Link from "next/link";
 
 export default function Page() {
   const ref = useRef<HTMLDivElement>(null);

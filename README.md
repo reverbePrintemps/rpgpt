@@ -1,42 +1,76 @@
-# Vercel AI SDK, Next.js, and OpenAI Chat Example
+# rpgpt
 
-This example shows how to use the [Vercel AI SDK](https://sdk.vercel.ai/docs) with [Next.js](https://nextjs.org/) and [OpenAI](https://openai.com) to create a ChatGPT-like AI-powered streaming chat bot.
+An AI-powered, text-based adventure role-playing game.
 
-## Deploy your own
+## Setup
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=ai-sdk-example):
+1. Clone the repository
+2. [Get openAI key](https://platform.openai.com/account/api-keys)
+3. Create a `.env.local` file at root of the project
+4. Add the following to your `.env.local` file:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai%2Ftree%2Fmain%2Fexamples%2Fnext-openai&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=vercel-ai-chat-openai&repository-name=vercel-ai-chat-openai)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example https://github.com/vercel-labs/ai/tree/main/examples/next-openai next-openai-app
+```
+OPENAI_KEY=<your openAI key>
 ```
 
-```bash
-yarn create next-app --example https://github.com/vercel-labs/ai/tree/main/examples/next-openai next-openai-app
-```
+## Stack
 
-```bash
-pnpm create next-app --example https://github.com/vercel-labs/ai/tree/main/examples/next-openai next-openai-app
-```
+- [Next.js](https://nextjs.org/) v.13+ (`App router` paradigm)
+- [Typescript](https://www.typescriptlang.org/) Because type safety is l̶o̶v̶e̶ life
+- [DaisyUI](https://daisyui.com/) Components and theming library based on [TailwindCSS](https://tailwindcss.com/)
+- [OpenAI API](https://platform.openai.com/docs/api-reference) Used to create chat completions
+- [Vercel AI SDK](https://github.com/vercel-labs/ai) Vercel's SDK to interact with some generative AI APIs (including openAI)
+- [OpenAI Edge](https://github.com/dan-kwiat/openai-edge) Unofficial (but officially recommended) package which uses fetch api (vs axios) to make requests to the openAI API and therefore can be deployed on an [edge environment](https://vercel.com/docs/concepts/edge-network/overview).
+- [husky](https://typicode.github.io/husky/) Used to run tests upon a commit
 
-To run the example locally you need to:
+## Key Concepts
 
-1. Sign up at [OpenAI's Developer Platform](https://platform.openai.com/signup).
-2. Go to [OpenAI's dashboard](https://platform.openai.com/account/api-keys) and create an API KEY.
-3. Set the required OpenAI environment variable as the token value as shown [the example env file](./.env.local.example) but in a new file called `.env.local`
-4. `pnpm install` to install the required dependencies.
-5. `pnpm dev` to launch the development server.
+### Next.js file structure
 
-## Learn More
+If you're unfamiliar with Next.js or the "new" Next v.13+ `App router` paradigm, I suggest [reading up on it](https://nextjs.org/docs/getting-started/project-structure).
 
-To learn more about OpenAI, Next.js, and the Vercel AI SDK take a look at the following resources:
+In a nutshell, the following names are reserved for special behaviors:
 
-- [Vercel AI SDK docs](https://sdk.vercel.ai/docs)
-- [Vercel AI Playground](https://play.vercel.ai)
-- [OpenAI Documentation](https://platform.openai.com/docs) - learn about OpenAI features and API.
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- `layout` - is a higher level component which will be used as a layout for all the pages in the directory
+- `page` - is the page rendered at the name of the directory
+- `loading` - will be returned by the server on page load until the page is ready to be rendered
+- `error` - will be returned by the server if there is an error when fetching the page
+- `route` - defines an API route
+
+In essence, all you need to create a new route for your app all you need is a directory containing a `page.tsx` file. Ex: `/contact/page.tsx` will create a `/contact` route and render a page at that route.
+
+You can [read more about this here](https://nextjs.org/docs/getting-started/project-structure#app-routing-conventions)
+
+### OpenAI API
+
+#### **Messages**
+
+If you're unfamiliar with the openAI API, especially the chat completion endpoint, I suggest [you give it a read](https://platform.openai.com/docs/api-reference/chat/create). In a nutshell, the chat completion works as an array of messages of 3 types:
+
+1. System - intended for instructing the model to adopt a persona, provide it with context, respond in a certain way, etc.
+2. User - This is the user "speaking" to the model. The model will respond to this message.
+3. Assistant - This is the model's response.
+
+### Project
+
+#### **API route**
+
+- Under `/app/api/chat/route.ts` you'll find the api for the chat completion.
+- It is called automatically when /game page is loaded.
+- This is because the `/game/page.tsx` file loaded upon visiting the `/game` page uses [Vercel's `useChat` hook](https://github.com/vercel-labs/ai) which is configured to call the `/api/chat` route by default. (this can be changed by modifying the value for `api` when calling this route)
+
+#### **Prompting**
+
+The `prompt.ts` file contains all the content relating to the initial setup of the model. This includes:
+
+- `systemMessage`: the initial message used to [give a persona to the model](https://platform.openai.com/docs/guides/gpt-best-practices/tactic-ask-the-model-to-adopt-a-persona). The system message is crucial to the model's ability to return relevant responses and consistent data (to the best of its ability), so be mindful when modifying it.
+- `promptExamples`: some initial prompt examples to get the player inspired before they start playing
+- helpers for generating the initial prompt and for some type safety
+
+#### **Round**
+
+A "round" refers to an interaction between the player and the model and is captured in the [`Round` type](./app/components/Round.tsx). An example round (`typicalRound`) is provided to the model in the `systemMessage` (see [prompting](#prompting)) as context for what is expected from it.
+
+## Notes, learnings and findings
+
+To capture or read up on any project-related notes, learnings or findings, please see the [notes.md](./notes.md) file.

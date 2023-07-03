@@ -1,3 +1,7 @@
+import { DiscordLogo } from "../assets/discord";
+import { Theme } from "../constants/theme";
+import { TextInput } from "./TextInput";
+import Link from "next/link";
 import {
   CSSProperties,
   ChangeEvent,
@@ -5,10 +9,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { DiscordLogo } from "../assets/discord";
-import { Theme } from "../constants/theme";
-import { TextInput } from "./TextInput";
-import Link from "next/link";
 
 type RoundOption = {
   id: number;

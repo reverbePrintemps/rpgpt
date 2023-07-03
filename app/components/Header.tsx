@@ -19,6 +19,8 @@ const getEndOfCurrentMonth = () => {
   return new Date(now.getFullYear(), now.getMonth() + 1, 0);
 };
 
+const today = new Date().toLocaleDateString();
+
 export const Navbar = ({ children, className, style }: HeaderProps) => {
   const pathName = usePathname();
   const [shouldShowBanner, setShouldShowBanner] = useState(true);
@@ -140,7 +142,7 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
                     <div>
                       From {getStartOfCurrentMonth().toLocaleDateString()}{" "}
                     </div>
-                    <div>to {getEndOfCurrentMonth().toLocaleDateString()}</div>
+                    <div>to {today}</div>
                   </div>
                 </div>
                 <div className="stat">

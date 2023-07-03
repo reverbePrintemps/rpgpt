@@ -2,16 +2,20 @@
 
 ## Ongoing
 
-- [ ] Option buttons don't wrap, causing longer options to extend the width of the screen. 🤦
+- [ ] Revamp README with documentation
 
 ## Backlog
 
 ### Features
 
+- [ ] Add delimiter around property names in system message to see if it helps the model understand instructions better
+- [ ] Improve model persona in system message (Rocco was told he couldn't rob a bank. This shows model isn't fully aware that they are a game master)
 - [ ] Sometimes, the openai API responds with simple text before proceeding with the requested JSON. Handle this case.
 
 ### Bugs
 
+- [ ] Firefox mobile seems to zoom in on input focus (https://stackoverflow.com/questions/69495070/prevent-zooming-in-after-input-field-focus-in-firefox-on-mobile)
+- [ ] Disable choice buttons when loading.
 - [ ] When loading, the previous (or current) round's input shows a spinner after submission.
 - [ ] Model doesn't seem to reliably understand that options and prompt examples need to be different.
 
@@ -21,6 +25,7 @@
 
 ## Done
 
+- [x] Option buttons don't wrap, causing longer options to extend the width of the screen. 🤦
 - [x] Also handle when to show the text input following a prompt better.
 - [x] Autogrowing textarea (cf. Spork)
 - [x] Rotating placeholder text (cf. Spork)
