@@ -3,6 +3,7 @@ import { Navbar } from "./components/Header";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Analytics />
         </div>
       </body>
+      <Script async src="https://js.stripe.com/v3/pricing-table.js" />
     </html>
   );
 }
