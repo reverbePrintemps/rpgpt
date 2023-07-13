@@ -22,6 +22,8 @@ OPENAI_KEY=<your openAI key>
 - [Vercel AI SDK](https://github.com/vercel-labs/ai) Vercel's SDK to interact with some generative AI APIs (including openAI)
 - [OpenAI Edge](https://github.com/dan-kwiat/openai-edge) Unofficial (but officially recommended) package which uses fetch api (vs axios) to make requests to the openAI API and therefore can be deployed on an [edge environment](https://vercel.com/docs/concepts/edge-network/overview).
 - [husky](https://typicode.github.io/husky/) Used to run tests upon a commit
+- [Firebase](https://firebase.google.com/) For authentication and database
+- [Stripe](https://stripe.com/) For payments
 
 ## Key Concepts
 

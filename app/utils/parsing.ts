@@ -69,7 +69,7 @@ export const forceParse = (fragment: string): string | object | undefined => {
     return parsed;
   } catch (error) {
     // Leaving this console log for now in an attempt to improve the function
-    process.env.NODE_ENV === "development" &&
+    ["development", "test"].includes(process.env.NODE_ENV) &&
       console.log("failed to parse:", fragment);
   }
 

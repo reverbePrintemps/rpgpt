@@ -21,6 +21,7 @@
 
 ### Tech debt
 
+- [ ] Refactor the logic to update token usage. Currently we get last 2 messages on a response. Better would be to update usage on a per-message basis.
 - [ ] Refactor/improve Round component by extracting components, state and logic where relevant.
 
 ## Done

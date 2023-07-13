@@ -1,15 +1,12 @@
 "use client";
-import { ReactNode, CSSProperties } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { ProfileButton } from "./ProfileButton";
 import { usePathname } from "next/navigation";
+import { auth } from "@/app/firebase/config";
 import Link from "next/link";
 
-interface HeaderProps {
-  children?: ReactNode;
-  className?: string;
-  style?: CSSProperties;
-}
-
-export const Navbar = ({ children, className, style }: HeaderProps) => {
+export const Navbar = () => {
+  const [user, loading, error] = useAuthState(auth);
   const pathName = usePathname();
 
   return (
@@ -20,9 +17,18 @@ export const Navbar = ({ children, className, style }: HeaderProps) => {
             <button className="btn btn-neutral normal-case">Back</button>
           </Link>
         )}
-        <button className="btn btn-ghost normal-case text-xl ml-auto">
-          rpgpt.
-        </button>
+        <button className="btn btn-ghost normal-case text-xl">rpgpt.</button>
+        {loading ? (
+          <div className="loading loading-spinner loading-sm mr-4" />
+        ) : user ? (
+          <ProfileButton />
+        ) : (
+          pathName !== "/signin" && (
+            <Link href="/signin">
+              <button className="btn btn-primary normal-case">Sign In</button>
+            </Link>
+          )
+        )}
       </div>
     </nav>
   );

@@ -7,5 +7,6 @@
 - After the model got stuck in some sort of neverending loop, just producing its own game by including "next_round" after next round, decided to add a value for "max_tokens" to prevent that from happening again.
 <!-- *Interesting -->
 - The order of the properties in the JSON object passed to the model seems to matter. If you want to receive something earlier than something else, place it higher in the example object.
+- While attempting to implement a paywall, I went on a long, confusing tangent which led me to create multiple new repos in an attempt to not use Firebase (mainly to learn something new). However, unsurprisingly, trying to pick up ~4 new technologies/libraries (Supabase, Prisma, tRPC, NextAuth) in one go on top of the Stripe SDK (and Next which is still a bit new for me) quickly became overwhelming. That being said, during this confusion-infused research phase I became aware of the [T3 stack](https://create.t3.gg/) (Typescript, tRPC, Tailwind) and hope that one day I'll be able to pick it up as I would a standard CRA or Next.js project. But for now, that much overhead and complexity is not worth it for a simple paywall. I'll be sticking with Firebase for now.
 
 # Learnings
