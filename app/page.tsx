@@ -1,22 +1,22 @@
 "use client";
-import Link from "next/link";
+import { Hero, Button, Link } from "react-daisyui";
 
 export default function Page() {
   return (
-    <div className="hero">
-      <div className="hero-content">
-        <div className="prose max-w-4xl flex flex-col">
-          <h1>rpgpt.</h1>
-          <h2>
-            An AI-powered, human-driven text-based adventure role playing game
-          </h2>
-          <div className="mt-8 ml-auto">
-            <Link href="/game">
-              <button className="btn btn-primary">Start game</button>
-            </Link>
-          </div>
+    <Hero>
+      <Hero.Content className="text-center">
+        <div className="max-w-md prose">
+          <h1 className="text-6xl">rpgpt.</h1>
+          <p className="text-2xl">
+            An AI-powered, human-driven text-based adventure role playing game.
+          </p>
+          <Link href="/game">
+            <Button color="primary" className="mt-8">
+              Start adventure
+            </Button>
+          </Link>
         </div>
-      </div>
-    </div>
+      </Hero.Content>
+    </Hero>
   );
 }

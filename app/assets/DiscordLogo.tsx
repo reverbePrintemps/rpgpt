@@ -1,9 +1,9 @@
 import { ReactNode, CSSProperties } from "react";
 
-type DiscordLogoProperties = {
+interface DiscordLogoProperties {
   style?: CSSProperties;
   className?: string;
-};
+}
 
 export const DiscordLogo = ({ className, style }: DiscordLogoProperties) => {
   return (

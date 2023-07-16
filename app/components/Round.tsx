@@ -1,4 +1,4 @@
-import { DiscordLogo } from "../assets/discord";
+import { DiscordLogo } from "../assets/DiscordLogo";
 import { Theme } from "../constants/theme";
 import { TextInput } from "./TextInput";
 import Link from "next/link";

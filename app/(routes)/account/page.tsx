@@ -33,7 +33,7 @@ export const Page = () => {
   });
   return (
     <div className="prose">
-      <h1>Profile</h1>
+      <h1>Account</h1>
       <div className="flex justify-between items-center">
         <div>
           <h2>Email</h2>

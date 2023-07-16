@@ -1,17 +1,14 @@
 "use client";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase/config";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useSendPasswordResetEmail } from "react-firebase-hooks/auth";
 import { Alert, Button, Card, Hero, Input, Toast, Form } from "react-daisyui";
+import { auth } from "@/app/firebase/config";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Page() {
-  const router = useRouter();
-  const [signInWithEmailAndPassword, credentials, loading, authError] =
-    useSignInWithEmailAndPassword(auth);
+  const [sendPasswordResetEmail, loading, authError] =
+    useSendPasswordResetEmail(auth);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState(authError);
 
   useEffect(() => {
@@ -19,8 +16,6 @@ export default function Page() {
       setError(authError);
     }
   }, [authError]);
-
-  if (credentials?.user) router.push("/account");
 
   return (
     <Hero>
@@ -41,14 +36,14 @@ export default function Page() {
       )}
       <Hero.Content className="flex-col">
         <div className="text-center lg:text-left prose">
-          <h1>Sign in</h1>
+          <h1>Reset password</h1>
         </div>
         <Card className="flex-shrink-0 w-full shadow-2xl">
           <Card.Body>
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
-                signInWithEmailAndPassword(email, password);
+                sendPasswordResetEmail(email);
               }}
             >
               <Form.Label title="Email" />
@@ -57,16 +52,6 @@ export default function Page() {
                 placeholder="email"
                 onChange={(e) => {
                   setEmail(e.target.value);
-                }}
-                disabled={loading}
-              />
-
-              <Form.Label title="Password" />
-              <Input
-                type="password"
-                placeholder="password"
-                onChange={(e) => {
-                  setPassword(e.target.value);
                 }}
                 disabled={loading}
               />
@@ -87,13 +72,13 @@ export default function Page() {
                     Loading
                   </>
                 ) : (
-                  "Sign in"
+                  "Send password reset email"
                 )}
               </Button>
             </Form>
-            <Link href="/signup">
+            <Link href="/signin">
               <label className="label link text-sm">
-                Don't have an account? Sign up
+                Remembered your password? Sign in
               </label>
             </Link>
           </Card.Body>

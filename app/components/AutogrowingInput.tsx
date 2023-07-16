@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import "../styles/AutogrowingInput.css";
 
-type AutogrowingInputProps = {
+interface AutogrowingInputProps {
   rows?: number;
   cols?: number;
   value: string;
@@ -14,7 +14,7 @@ type AutogrowingInputProps = {
   onFocus?: () => void;
   onEnter?: () => void;
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-};
+}
 
 export const AutogrowingInput = ({
   rows,
