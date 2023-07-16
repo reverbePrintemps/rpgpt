@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
       event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      // On error, log and return the error message.
       if (err! instanceof Error) console.log(err);
       console.log(`❌ Error message: ${errorMessage}`);
 
@@ -44,8 +43,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Successfully constructed event.
-    console.log("✅ Success:", event.id);
+    ["development", "test"].includes(process.env.NODE_ENV) &&
+      console.log("✅ Success:", event.id);
 
     switch (event.type) {
       case "checkout.session.completed":
@@ -57,7 +56,6 @@ export async function POST(req: NextRequest) {
         break;
     }
 
-    // Return a response to acknowledge receipt of the event.
     return NextResponse.json({ received: true }, { status: 200 });
   } catch {
     return NextResponse.json(

@@ -8,15 +8,16 @@ import { useEffect } from "react";
 
 export const Page = () => {
   const router = useRouter();
-  const { email, usage } = useUserData(auth);
+  const { email, usage } = useUserData();
   // TODO Use loading and error for both
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const [signOut] = useSignOut(auth);
+
   useEffect(() => {
-    if (!user) {
-      router.push("/signin");
+    if (!loading && !user) {
+      router.push("/auth/signin");
     }
-  }, [user]);
+  }, [user, loading]);
 
   const month = new Date().toLocaleDateString("default", { month: "long" });
   const today = new Date().toLocaleDateString("default", {

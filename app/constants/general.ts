@@ -1,0 +1,1 @@
+export const MAX_TOKENS_FREE_USER = 10000;

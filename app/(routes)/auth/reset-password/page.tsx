@@ -23,11 +23,10 @@ export default function Page() {
         <Toast
           vertical="top"
           horizontal="center"
-          // TODO - Figure out how to always apply these styles to a Toast (ie. override the default styles)
-          style={{ zIndex: 1, width: "100%", whiteSpace: "unset" }}
+          className="z-[1] w-full whitespace-normal"
         >
-          <Alert status="error">
-            {error.message}
+          <Alert status="error" className="flex justify-between">
+            <span>{error.message}</span>
             <Button color="neutral" onClick={() => setError(undefined)}>
               Dismiss
             </Button>
@@ -55,11 +54,6 @@ export default function Page() {
                 }}
                 disabled={loading}
               />
-              <label className="label">
-                <Link href="/reset-password" className="label-text-alt">
-                  Forgot password?
-                </Link>
-              </label>
               <Button
                 color="primary"
                 disabled={loading}
@@ -76,7 +70,7 @@ export default function Page() {
                 )}
               </Button>
             </Form>
-            <Link href="/signin">
+            <Link href="/auth/signin">
               <label className="label link text-sm">
                 Remembered your password? Sign in
               </label>

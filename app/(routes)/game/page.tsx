@@ -1,18 +1,28 @@
 "use client";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { MAX_TOKENS_FREE_USER } from "@/app/constants/general";
 import { initialMessages } from "../../constants/prompt";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Alert, Badge, Button, Progress } from "react-daisyui";
 import { scrollToBottom } from "../../utils/scrolling";
-import { forceParse } from "../../utils/parsing";
-import { Round } from "../../components/Round";
-import { useChat } from "ai/react";
 import { updateUsage } from "@/app/firebase/functions";
+import { useUserData } from "@/app/hooks/firebase";
+import { forceParse } from "../../utils/parsing";
+import { InfoIcon } from "@/app/assets/InfoIcon";
+import { Round } from "../../components/Round";
+import { auth } from "@/app/firebase/config";
+import { useChat } from "ai/react";
+import Link from "next/link";
 
 export default function Page() {
   const ref = useRef<HTMLDivElement>(null);
+  const [user] = useAuthState(auth);
+  const { isPaying } = useUserData();
   const [isFinished, setIsFinished] = useState(false);
   const [rounds, setRounds] = useState<Round[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error>();
+  const localTokenUsage = localStorage.getItem("token-usage");
 
   const {
     isLoading: isWriting,
@@ -79,6 +89,10 @@ export default function Page() {
     reload();
   };
 
+  const tokenUsagePercentage = Math.round(
+    (Number(localTokenUsage) / MAX_TOKENS_FREE_USER) * 100
+  );
+
   return (
     <div ref={ref} className="scroll-m-52 w-full">
       <h2 className="font-bold text-2xl">Game</h2>
@@ -108,6 +122,32 @@ export default function Page() {
             <p>Loading...</p>
           </div>
         </>
+      )}
+      {!isPaying && (
+        <Alert status="info" icon={<InfoIcon />} className="mt-8">
+          <div className="w-full flex-row justify-between gap-2">
+            <h3 className="text-lg font-bold">Current usage</h3>
+            <div>
+              <Progress className="w-56" value={tokenUsagePercentage / 100} />
+              {tokenUsagePercentage && (
+                <Badge className="ml-4">
+                  {`${localTokenUsage} tokens  (${tokenUsagePercentage}%)`}
+                </Badge>
+              )}
+            </div>
+            <h4>
+              As a Free user, your usage is limited to
+              <Badge className="mx-2">{MAX_TOKENS_FREE_USER}</Badge>
+              tokens.
+            </h4>
+            <Link href="/auth/signin">
+              <h4 className="link">Paying user? Sign in</h4>
+            </Link>
+          </div>
+          <Link href="/pricing">
+            <Button color="primary">Learn more</Button>
+          </Link>
+        </Alert>
       )}
     </div>
   );

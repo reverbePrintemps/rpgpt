@@ -8,6 +8,7 @@
 
 ### Features
 
+- [ ] More comprehensive firebase error messages. Currently we're just passing the error message, such as: "Firebase: Error (auth/user-not-found)."
 - [ ] Add delimiter around property names in system message to see if it helps the model understand instructions better
 - [ ] Improve model persona in system message (Rocco was told he couldn't rob a bank. This shows model isn't fully aware that they are a game master)
 - [ ] Sometimes, the openai API responds with simple text before proceeding with the requested JSON. Handle this case.

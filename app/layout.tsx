@@ -1,12 +1,9 @@
 import { Analytics } from "@vercel/analytics/react";
-import { Navbar } from "./components/Header";
-import { Inter } from "next/font/google";
+import { Header } from "./components/Header";
+import Footer from "./components/Footer";
 import { ReactNode } from "react";
 import Script from "next/script";
 import "./globals.css";
-import Footer from "./components/Footer";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "rpgpt",
@@ -15,10 +12,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-theme="light">
-      <body className={inter.className}>
+    <html lang="en" data-theme="light" className="bg-neutral">
+      <body className="bg-white">
         <header className="sticky top-0 z-[1]">
-          <Navbar />
+          <Header />
         </header>
         <div className="flex flex-col w-full max-w-4xl mx-auto stretch px-4 pt-10 pb-40 min-h-screen">
           {children}

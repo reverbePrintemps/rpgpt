@@ -5,4 +5,5 @@ export type AppUser = {
   email: string;
   // TODO key is a month. Type this better.
   usage: { [key: string]: number } | undefined;
+  isPaying: boolean;
 };

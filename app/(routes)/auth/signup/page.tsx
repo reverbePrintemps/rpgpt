@@ -1,18 +1,19 @@
 "use client";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase/config";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Alert, Button, Card, Hero, Input, Toast, Form } from "react-daisyui";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { auth, firestore } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Alert, Button, Card, Hero, Input, Toast, Form } from "react-daisyui";
 import Link from "next/link";
 
 export default function Page() {
   const router = useRouter();
-  const [signInWithEmailAndPassword, credentials, loading, authError] =
-    useSignInWithEmailAndPassword(auth);
+  const [createUser, user, loading, authError] =
+    useCreateUserWithEmailAndPassword(auth);
+  const [error, setError] = useState(authError);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(authError);
 
   useEffect(() => {
     if (authError) {
@@ -20,7 +21,7 @@ export default function Page() {
     }
   }, [authError]);
 
-  if (credentials?.user) router.push("/account");
+  if (user) router.push("/auth/account");
 
   return (
     <Hero>
@@ -28,11 +29,10 @@ export default function Page() {
         <Toast
           vertical="top"
           horizontal="center"
-          // TODO - Figure out how to always apply these styles to a Toast (ie. override the default styles)
-          style={{ zIndex: 1, width: "100%", whiteSpace: "unset" }}
+          className="z-[1] w-full whitespace-normal"
         >
-          <Alert status="error">
-            {error.message}
+          <Alert status="error" className="flex justify-between">
+            <span>{error.message}</span>
             <Button color="neutral" onClick={() => setError(undefined)}>
               Dismiss
             </Button>
@@ -41,14 +41,20 @@ export default function Page() {
       )}
       <Hero.Content className="flex-col">
         <div className="text-center lg:text-left prose">
-          <h1>Sign in</h1>
+          <h1>Sign up</h1>
         </div>
         <Card className="flex-shrink-0 w-full shadow-2xl">
           <Card.Body>
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
-                signInWithEmailAndPassword(email, password);
+                createUser(email, password).then((userCredential) => {
+                  if (userCredential)
+                    setDoc(doc(firestore, "users", userCredential.user.uid), {
+                      email: userCredential?.user.email,
+                      createdAt: serverTimestamp(),
+                    });
+                });
               }}
             >
               <Form.Label title="Email" />
@@ -60,7 +66,6 @@ export default function Page() {
                 }}
                 disabled={loading}
               />
-
               <Form.Label title="Password" />
               <Input
                 type="password"
@@ -70,11 +75,6 @@ export default function Page() {
                 }}
                 disabled={loading}
               />
-              <label className="label">
-                <Link href="/reset-password" className="label-text-alt">
-                  Forgot password?
-                </Link>
-              </label>
               <Button
                 color="primary"
                 disabled={loading}
@@ -87,13 +87,13 @@ export default function Page() {
                     Loading
                   </>
                 ) : (
-                  "Sign in"
+                  "Sign up"
                 )}
               </Button>
             </Form>
-            <Link href="/signup">
+            <Link href="/auth/signin">
               <label className="label link text-sm">
-                Don't have an account? Sign up
+                Already have an account? Sign in
               </label>
             </Link>
           </Card.Body>
