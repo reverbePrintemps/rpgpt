@@ -13,12 +13,10 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" data-theme="light" className="bg-neutral">
-      <body className="bg-white">
-        <header className="sticky top-0 z-[1]">
-          <Header />
-        </header>
-        <div className="flex flex-col w-full max-w-4xl mx-auto stretch px-4 pt-10 pb-40 min-h-screen">
-          {children}
+      <body>
+        <Header />
+        <div className="flex flex-col w-full px-4 pt-8 pb-8 min-h-screen bg-neutral mb-40">
+          <div className="max-w-4xl mx-auto w-full">{children}</div>
         </div>
         <Footer />
         <Analytics />

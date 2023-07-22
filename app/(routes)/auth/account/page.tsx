@@ -1,12 +1,16 @@
 "use client";
-
+import { PRICE_PER_THOUSAND_TOKENS_USD } from "@/app/constants/general";
 import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import { useUserData } from "@/app/hooks/firebase";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import {
+  LocalStorageItems,
+  setToLocalStorage,
+} from "@/app/utils/local-storage";
 
-export const Page = () => {
+export default function Page() {
   const router = useRouter();
   const { email, usage } = useUserData();
   // TODO Use loading and error for both
@@ -18,6 +22,16 @@ export const Page = () => {
       router.push("/auth/signin");
     }
   }, [user, loading]);
+
+  useEffect(() => {
+    // Update local storage with usage from firebase
+    if (usage) {
+      setToLocalStorage({
+        kind: LocalStorageItems.TokenUsage,
+        value: usage[month],
+      });
+    }
+  }, [usage]);
 
   const month = new Date().toLocaleDateString("default", { month: "long" });
   const today = new Date().toLocaleDateString("default", {
@@ -33,20 +47,22 @@ export const Page = () => {
     day: "numeric",
   });
   return (
-    <div className="prose">
-      <h1>Account</h1>
+    <div className="prose text-neutral-content">
+      <h1 className="text-neutral-content">Account</h1>
       <div className="flex justify-between items-center">
-        <div>
-          <h2>Email</h2>
-          <p>{email}</p>
+        <div className="prose">
+          <h2 className="text-neutral-content">Email</h2>
+          <p className="text-neutral-content">{email}</p>
         </div>
-        <button className="btn btn-primary normal-case" onClick={signOut}>
+        <button className="btn btn-primary normal-case ml-8" onClick={signOut}>
           Sign Out
         </button>
       </div>
       {usage?.[month] && (
         <>
-          <h2>Usage</h2>
+          <h2 id="usage" className="text-neutral-content">
+            Usage
+          </h2>
           <div className="stats shadow">
             <div className="stat">
               <div className="stat-title">Tokens</div>
@@ -58,9 +74,13 @@ export const Page = () => {
             <div className="stat">
               <div className="stat-title">USD</div>
               <div className="stat-value">
-                {(usage[month] * 0.000003).toLocaleString("en-US", {
+                {(
+                  (usage[month] * PRICE_PER_THOUSAND_TOKENS_USD) /
+                  1000
+                ).toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
+                  maximumFractionDigits: 3,
                 })}
               </div>
               <div className="stat-desc">
@@ -72,6 +92,4 @@ export const Page = () => {
       )}
     </div>
   );
-};
-
-export default Page;
+}

@@ -7,3 +7,5 @@ export type AppUser = {
   usage: { [key: string]: number } | undefined;
   isPaying: boolean;
 };
+
+export type TokenUsage = number;

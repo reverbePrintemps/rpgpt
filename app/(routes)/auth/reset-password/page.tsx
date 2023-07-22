@@ -18,7 +18,7 @@ export default function Page() {
   }, [authError]);
 
   return (
-    <Hero>
+    <>
       {error && (
         <Toast
           vertical="top"
@@ -33,51 +33,49 @@ export default function Page() {
           </Alert>
         </Toast>
       )}
-      <Hero.Content className="flex-col">
-        <div className="text-center lg:text-left prose">
-          <h1>Reset password</h1>
-        </div>
-        <Card className="flex-shrink-0 w-full shadow-2xl">
-          <Card.Body>
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendPasswordResetEmail(email);
+      <div className="text-center  prose">
+        <h1 className="text-neutral-content">Reset password</h1>
+      </div>
+      <Card className="flex-shrink-0 w-full shadow-2xl mt-8 bg-neutral-content text-neutral">
+        <Card.Body>
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendPasswordResetEmail(email);
+            }}
+          >
+            <Form.Label title="Email" />
+            <Input
+              type="email"
+              placeholder="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
               }}
+              disabled={loading}
+            />
+            <Button
+              color="primary"
+              disabled={loading}
+              type="submit"
+              className="mt-8"
             >
-              <Form.Label title="Email" />
-              <Input
-                type="email"
-                placeholder="email"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                disabled={loading}
-              />
-              <Button
-                color="primary"
-                disabled={loading}
-                type="submit"
-                className="mt-8"
-              >
-                {loading ? (
-                  <>
-                    <span className="loading loading-spinner loading-sm" />
-                    Loading
-                  </>
-                ) : (
-                  "Send password reset email"
-                )}
-              </Button>
-            </Form>
-            <Link href="/auth/signin">
-              <label className="label link text-sm">
-                Remembered your password? Sign in
-              </label>
-            </Link>
-          </Card.Body>
-        </Card>
-      </Hero.Content>
-    </Hero>
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm" />
+                  Loading
+                </>
+              ) : (
+                "Send password reset email"
+              )}
+            </Button>
+          </Form>
+          <Link href="/auth/signin">
+            <label className="label link text-sm">
+              Remembered your password? Sign in
+            </label>
+          </Link>
+        </Card.Body>
+      </Card>
+    </>
   );
 }

@@ -2,12 +2,18 @@
 
 ## Ongoing
 
-- [ ] Revamp README with documentation
+- [ ] Block game when free usage is exceeded
+- [ ] Implement save payment details and pay later (https://stripe.com/docs/payments/save-and-reuse?platform=web&ui=checkout)
 
 ## Backlog
 
 ### Features
 
+- [ ] Improve content/styling of home page
+- [ ] Improve styling of /account page
+- [ ] Improve app metadata (favicon, manifest, social sharing cards, etc.)
+- [ ] Add tests for usage calculation (incl. local storage)
+- [ ] Handle case when max_tokens are exceeded
 - [ ] More comprehensive firebase error messages. Currently we're just passing the error message, such as: "Firebase: Error (auth/user-not-found)."
 - [ ] Add delimiter around property names in system message to see if it helps the model understand instructions better
 - [ ] Improve model persona in system message (Rocco was told he couldn't rob a bank. This shows model isn't fully aware that they are a game master)
@@ -22,11 +28,21 @@
 
 ### Tech debt
 
+- [ ] Unify local/db token usage logic
+- [ ] Fix issue with window (or localStorage) not being available even though components are marked as "use client"
+- [ ] Create a constant for all routes in the app and use them instead of hardcoding strings
+- [ ] Improve accessibility of top level Menu (currently no focus nor focus state)
+- [ ] Fetch account info server side when loading /account
 - [ ] Refactor the logic to update token usage. Currently we get last 2 messages on a response. Better would be to update usage on a per-message basis.
 - [ ] Refactor/improve Round component by extracting components, state and logic where relevant.
 
 ## Done
 
+- [x] Make sure token calculation is correct
+- [x] Finish FAQ
+- [x] Fix local storage/token usage
+- [x] Fix game/prompting
+- [x] Revamp README with documentation
 - [x] Option buttons don't wrap, causing longer options to extend the width of the screen. 🤦
 - [x] Also handle when to show the text input following a prompt better.
 - [x] Autogrowing textarea (cf. Spork)

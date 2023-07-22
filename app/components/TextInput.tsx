@@ -1,6 +1,7 @@
 import { CSSProperties, ChangeEvent, FormEvent } from "react";
 import { useTypingEffect } from "../utils/typing-effect";
 import { AutogrowingInput } from "./AutogrowingInput";
+import { Button } from "react-daisyui";
 
 interface TextInputProps {
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -41,6 +42,7 @@ export const TextInput = ({
     >
       <div className="flex items-end">
         <AutogrowingInput
+          className="bg-neutral text-neutral-content"
           onChange={onChange}
           placeholder={isLoading ? "Loading..." : typingPlaceholders}
           value={input || ""}
@@ -56,13 +58,14 @@ export const TextInput = ({
             )
           }
         />
-        <button
-          className="btn btn-primary ml-4 disabled:opacity-50"
+        <Button
+          className="ml-4 disabled:opacity-50"
           type="submit"
+          // TODO Override default disabled style because really not accessible (practically invisible)
           disabled={disabled || isLoading || input === ""}
         >
           Send
-        </button>
+        </Button>
       </div>
     </form>
   );

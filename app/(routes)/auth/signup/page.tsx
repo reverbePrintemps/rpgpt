@@ -24,7 +24,7 @@ export default function Page() {
   if (user) router.push("/auth/account");
 
   return (
-    <Hero>
+    <>
       {error && (
         <Toast
           vertical="top"
@@ -39,66 +39,64 @@ export default function Page() {
           </Alert>
         </Toast>
       )}
-      <Hero.Content className="flex-col">
-        <div className="text-center lg:text-left prose">
-          <h1>Sign up</h1>
-        </div>
-        <Card className="flex-shrink-0 w-full shadow-2xl">
-          <Card.Body>
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                createUser(email, password).then((userCredential) => {
-                  if (userCredential)
-                    setDoc(doc(firestore, "users", userCredential.user.uid), {
-                      email: userCredential?.user.email,
-                      createdAt: serverTimestamp(),
-                    });
-                });
+      <div className="text-center prose">
+        <h1 className="text-neutral-content">Sign up</h1>
+      </div>
+      <Card className="flex-shrink-0 w-full shadow-2xl mt-8 bg-neutral-content text-neutral">
+        <Card.Body>
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              createUser(email, password).then((userCredential) => {
+                if (userCredential)
+                  setDoc(doc(firestore, "users", userCredential.user.uid), {
+                    email: userCredential?.user.email,
+                    createdAt: serverTimestamp(),
+                  });
+              });
+            }}
+          >
+            <Form.Label title="Email" />
+            <Input
+              type="email"
+              placeholder="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
               }}
+              disabled={loading}
+            />
+            <Form.Label title="Password" />
+            <Input
+              type="password"
+              placeholder="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              disabled={loading}
+            />
+            <Button
+              color="primary"
+              disabled={loading}
+              type="submit"
+              className="mt-8"
             >
-              <Form.Label title="Email" />
-              <Input
-                type="email"
-                placeholder="email"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                disabled={loading}
-              />
-              <Form.Label title="Password" />
-              <Input
-                type="password"
-                placeholder="password"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                disabled={loading}
-              />
-              <Button
-                color="primary"
-                disabled={loading}
-                type="submit"
-                className="mt-8"
-              >
-                {loading ? (
-                  <>
-                    <span className="loading loading-spinner loading-sm" />
-                    Loading
-                  </>
-                ) : (
-                  "Sign up"
-                )}
-              </Button>
-            </Form>
-            <Link href="/auth/signin">
-              <label className="label link text-sm">
-                Already have an account? Sign in
-              </label>
-            </Link>
-          </Card.Body>
-        </Card>
-      </Hero.Content>
-    </Hero>
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm" />
+                  Loading
+                </>
+              ) : (
+                "Sign up"
+              )}
+            </Button>
+          </Form>
+          <Link href="/auth/signin">
+            <label className="label link text-sm">
+              Already have an account? Sign in
+            </label>
+          </Link>
+        </Card.Body>
+      </Card>
+    </>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Alert, Button, Card, Input, Toast, Form } from "react-daisyui";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Alert, Button, Card, Hero, Input, Toast, Form } from "react-daisyui";
 import Link from "next/link";
 
 export default function Page() {
@@ -38,10 +38,10 @@ export default function Page() {
           </Alert>
         </Toast>
       )}
-      <div className="text-center lg:text-left prose">
-        <h1>Sign in</h1>
+      <div className="text-center prose">
+        <h1 className="text-neutral-content">Sign in</h1>
       </div>
-      <Card className="flex-shrink-0 w-full shadow-2xl">
+      <Card className="flex-shrink-0 w-full shadow-2xl mt-8 bg-neutral-content text-neutral">
         <Card.Body>
           <Form
             onSubmit={(e) => {
@@ -58,7 +58,6 @@ export default function Page() {
               }}
               disabled={loading}
             />
-
             <Form.Label title="Password" />
             <Input
               type="password"
