@@ -10,6 +10,7 @@ import { forceParse } from "../../utils/parsing";
 import { InfoIcon } from "@/app/assets/InfoIcon";
 import { Round } from "../../components/Round";
 import { auth } from "@/app/firebase/config";
+import { TokenUsage } from "@/app/types";
 import { useChat } from "ai/react";
 import Link from "next/link";
 import {
@@ -27,8 +28,18 @@ export default function Page() {
   const signedIn = auth.currentUser?.uid;
   // TODO Unify usage from local storage and firebase
   const month = new Date().toLocaleDateString("default", { month: "long" });
-  const localTokenUsage = getFromLocalStorage(LocalStorageItems.TokenUsage);
+  const [localTokenUsage, setLocalTokenUsage] = useState<TokenUsage | null>(
+    null
+  );
   const tokenUsage = signedIn ? usage?.[month] || 0 : localTokenUsage;
+
+  // Need to wrap this in a useEffect to make sure window is defined before using local storage even though this is a client component. Not sure why.
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const localUsage = getFromLocalStorage(LocalStorageItems.TokenUsage);
+      setLocalTokenUsage(localUsage);
+    }
+  }, []);
 
   const {
     isLoading: isWriting,
