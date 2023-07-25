@@ -6,20 +6,29 @@ import { usePathname } from "next/navigation";
 import { MenuIcon } from "../assets/MenuIcon";
 import { HomeIcon } from "../assets/HomeIcon";
 import { DiceIcon } from "../assets/DiceIcon";
+import { useRouter } from "next/navigation";
 import { ThemePicker } from "./ThemePicker";
 import Link from "next/link";
 
 export const Header = () => {
   const pathName = usePathname();
+  const router = useRouter();
+
+  const handleBackClick = () => {
+    router.back();
+  };
 
   return (
     <Navbar className="sticky top-0 z-[1] bg-base-100">
       <div className="flex justify-between w-full max-w-4xl mx-auto">
         <Navbar.Start>
           {pathName !== "/" && (
-            <Link href="/">
-              <button className="btn btn-ghost normal-case">Back</button>
-            </Link>
+            <button
+              onClick={handleBackClick}
+              className="btn btn-ghost normal-case"
+            >
+              Back
+            </button>
           )}
         </Navbar.Start>
         <Navbar.Center>
