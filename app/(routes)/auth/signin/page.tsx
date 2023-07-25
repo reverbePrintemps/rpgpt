@@ -1,6 +1,7 @@
 "use client";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { Alert, Button, Card, Input, Toast, Form } from "react-daisyui";
+import { translateAuthErrorToHuman } from "@/app/utils/errors";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -31,7 +32,7 @@ export default function Page() {
           className="z-[1] w-full whitespace-normal"
         >
           <Alert status="error" className="flex justify-between">
-            <span>{error.message}</span>
+            <span>{translateAuthErrorToHuman(error)}</span>
             <Button color="neutral" onClick={() => setError(undefined)}>
               Dismiss
             </Button>
