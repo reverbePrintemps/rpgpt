@@ -34,9 +34,9 @@ export default function Page() {
         </Toast>
       )}
       <div className="text-center  prose">
-        <h1 className="text-neutral-content">Reset password</h1>
+        <h1>Reset password</h1>
       </div>
-      <Card className="flex-shrink-0 w-full shadow-2xl mt-8 bg-neutral-content text-neutral">
+      <Card className="flex-shrink-0 w-full shadow-2xl mt-8">
         <Card.Body>
           <Form
             onSubmit={(e) => {

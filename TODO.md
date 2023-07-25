@@ -2,13 +2,14 @@
 
 ## Ongoing
 
-- [ ] Block game when free usage is exceeded
 - [ ] Implement save payment details and pay later (https://stripe.com/docs/payments/save-and-reuse?platform=web&ui=checkout)
 
 ## Backlog
 
 ### Features
 
+- [ ] Bottom tabs for navigation on mobile
+- [ ] What if no local storage? Use cookies? Or force login?
 - [ ] Improve content/styling of home page
 - [ ] Improve styling of /account page
 - [ ] Improve app metadata (favicon, manifest, social sharing cards, etc.)
@@ -21,6 +22,9 @@
 
 ### Bugs
 
+- [ ] Fix theme switching
+- [ ] Theme picker should always show currently selected theme. (although this sounds like an easy bug it probably isn't as it involves rethinking how we set/get the theme)
+  - Currently we only set the theme locally using localStorage. We might want to use cookies instead. Also, theming might even be irrelevant since the game programmatically changes the theme.
 - [ ] Firefox mobile seems to zoom in on input focus (https://stackoverflow.com/questions/69495070/prevent-zooming-in-after-input-field-focus-in-firefox-on-mobile)
 - [ ] Disable choice buttons when loading.
 - [ ] When loading, the previous (or current) round's input shows a spinner after submission.
@@ -28,6 +32,7 @@
 
 ### Tech debt
 
+- [ ] Remove all usage of "prose" classNames and uninstall @tailwindcss/typography (doesn't actually make things easy when themes are involved)
 - [ ] Unify local/db token usage logic
 - [ ] Fix issue with window (or localStorage) not being available even though components are marked as "use client"
 - [ ] Create a constant for all routes in the app and use them instead of hardcoding strings
@@ -38,6 +43,8 @@
 
 ## Done
 
+- [x] Theme picker
+- [x] Block game when free usage is exceeded
 - [x] Make sure token calculation is correct
 - [x] Finish FAQ
 - [x] Fix local storage/token usage

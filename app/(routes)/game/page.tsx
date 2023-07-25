@@ -39,7 +39,10 @@ export default function Page() {
       const localUsage = getFromLocalStorage(LocalStorageItems.TokenUsage);
       setLocalTokenUsage(localUsage);
     }
-  }, []);
+  }, [
+    typeof window !== "undefined" &&
+      getFromLocalStorage(LocalStorageItems.TokenUsage),
+  ]);
 
   const {
     isLoading: isWriting,
@@ -58,6 +61,10 @@ export default function Page() {
       if (!forceParse(message.content)) {
         setError(new Error("Failed to parse message"));
       }
+    },
+    onError: (error) => {
+      setError(error);
+      setIsLoading(false);
     },
   });
 
@@ -108,15 +115,17 @@ export default function Page() {
     (Number(tokenUsage) / MAX_TOKENS_FREE_USER) * 100
   );
 
+  const exhaustedFreeTokens = tokenUsagePercentage >= 100;
+
   return (
-    <div ref={ref} className="scroll-m-52 w-full text-neutral-content relative">
+    <div ref={ref} className="scroll-m-62 w-full relative">
       {!isPaying && (
         <Alert status="info" icon={<InfoIcon />}>
           <div className="w-full justify-between gap-2">
             <h3 className="text-lg font-bold">Current usage</h3>
             <div>
               <Progress className="w-56" value={tokenUsagePercentage / 100} />{" "}
-              {tokenUsagePercentage}%
+              {Math.min(tokenUsagePercentage, 100)}%
             </div>
             <h4>
               As a Free user, your usage is limited to {MAX_TOKENS_FREE_USER}{" "}
@@ -128,24 +137,51 @@ export default function Page() {
           </Link>
         </Alert>
       )}
-      <h2 className={`font-bold text-2xl ${!isPaying ? "mt-8" : ""}`}>Game</h2>
-      {rounds.map((round) => {
-        const latestRound = rounds[rounds.length - 1].id === round.id;
-        return (
-          <Round
-            key={round.id}
-            round={round}
-            error={error}
-            isFinished={isFinished}
-            latestRound={latestRound}
-            onTryAgain={handleTryAgain}
-            onSubmit={handleRoundSubmit}
-            isLoading={latestRound && isWriting}
-            onTextInputChange={handleInputChange}
-            onChoiceSelected={handleRoundChoiceSelected}
-          />
-        );
-      })}
+      <div
+        className={`
+        ${exhaustedFreeTokens ? "bg-base-300 w-full h-full opacity-50 p-4" : ""}
+        ${!isPaying ? "mt-8" : ""}`}
+      >
+        <h2 className="font-bold text-2xl">Game</h2>
+        {rounds.map((round) => {
+          const latestRound = rounds[rounds.length - 1].id === round.id;
+          return (
+            <Round
+              key={round.id}
+              round={round}
+              error={error}
+              isFinished={isFinished}
+              latestRound={latestRound}
+              onTryAgain={handleTryAgain}
+              onSubmit={handleRoundSubmit}
+              disabled={exhaustedFreeTokens}
+              isLoading={latestRound && isWriting}
+              onTextInputChange={handleInputChange}
+              onChoiceSelected={handleRoundChoiceSelected}
+            />
+          );
+        })}
+      </div>
+      {exhaustedFreeTokens && (
+        <>
+          <h2 className={`font-bold text-2xl ${!isPaying ? "mt-8" : ""}`}>
+            Game over
+          </h2>
+          <p className="mt-8">
+            To continue using <strong>rpgpt</strong>, simply enter your payment
+            details to pay-as-you-go. For more information: check out out our{" "}
+            <Link href="/pricing" className="link">
+              pricing page
+            </Link>
+            .
+          </p>
+          <Link href="/pricing">
+            <Button color="primary" className="mt-8">
+              Enter payment details
+            </Button>
+          </Link>
+        </>
+      )}
       {!error && isLoading && (
         <>
           <div className="divider">

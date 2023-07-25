@@ -3,6 +3,6 @@ export const MAX_TOKENS_FREE_USER = 10000;
 // As of July 20, 2023, the cost per 1000 tokens for "GPT-3.5 Turbo" with "4K context" is:
 // Input: 0.0015$
 // Output: 0.002$
-// Will start experimenting with 0.004$ per 1000 tokens
+// Will start experimenting with 0.005$ per 1000 tokens
 // Can always adjust later
-export const PRICE_PER_THOUSAND_TOKENS_USD = 0.004;
+export const PRICE_PER_THOUSAND_TOKENS_USD = 0.005;

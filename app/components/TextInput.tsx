@@ -20,10 +20,12 @@ export const TextInput = ({
   className,
   onSubmit,
   onChange,
-  disabled,
+  disabled: disabledProp,
   input,
   style,
 }: TextInputProps) => {
+  const disabledInput = disabledProp || isLoading;
+  const disabledButton = disabledProp || isLoading || !input?.length;
   // TODO: Implement typing effect but careful with "Maximum depth exceeded" error
   const typingPlaceholders = useTypingEffect({
     cursor: true,
@@ -42,12 +44,17 @@ export const TextInput = ({
     >
       <div className="flex items-end">
         <AutogrowingInput
-          className="bg-neutral text-neutral-content"
           onChange={onChange}
-          placeholder={isLoading ? "Loading..." : typingPlaceholders}
+          placeholder={
+            isLoading
+              ? "Loading..."
+              : disabledInput
+              ? input || ""
+              : typingPlaceholders
+          }
           value={input || ""}
           isLoading={isLoading}
-          disabled={disabled}
+          disabled={disabledInput}
           onEnter={() =>
             onSubmit &&
             onSubmit(
@@ -58,12 +65,7 @@ export const TextInput = ({
             )
           }
         />
-        <Button
-          className="ml-4 disabled:opacity-50"
-          type="submit"
-          // TODO Override default disabled style because really not accessible (practically invisible)
-          disabled={disabled || isLoading || input === ""}
-        >
+        <Button className="ml-4" type="submit" disabled={disabledButton}>
           Send
         </Button>
       </div>

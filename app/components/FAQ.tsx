@@ -4,23 +4,21 @@ import { Card, Collapse, Divider } from "react-daisyui";
 export const FAQ = () => {
   return (
     <div className="mt-16 w-full">
-      <div className="prose">
-        <h2 className="text-neutral-content">Frequently Asked Questions</h2>
-      </div>
-      <Card className="shadow-2xl mt-8 bg-neutral-content">
+      <h2>Frequently Asked Questions</h2>
+      <Card className="shadow-2xl mt-8 bg-base-content text-base-100">
         <Card.Body>
           <Collapse className="collapse-arrow">
             <Collapse.Title className="text-xl font-medium">
               What is rpgpt?
             </Collapse.Title>
-            <Collapse.Content>
+            <Collapse.Content className="text-base-200">
               <strong>rpgpt</strong> is an AI-driven text adventure game. It's a
               bit like a "choose your own adventure" book, but with a lot more
               freedom. You can be anyone, in any universe, doing anything. The
               only limit is your imagination.
             </Collapse.Content>
           </Collapse>
-          <Divider className="m-0" />
+          <Divider className="m-0 before:bg-base-300 after:bg-base-300" />
           <Collapse className="collapse-arrow">
             <Collapse.Title className="text-xl font-medium">
               What are tokens and how are they calculated?
@@ -60,7 +58,7 @@ export const FAQ = () => {
               </p>
             </Collapse.Content>
           </Collapse>
-          <Divider className="m-0" />
+          <Divider className="m-0 before:bg-base-300 after:bg-base-300" />
           <Collapse className="collapse-arrow">
             <Collapse.Title className="text-xl font-medium">
               What language model does rpgpt use?

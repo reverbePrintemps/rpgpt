@@ -79,7 +79,7 @@ export const AutogrowingInput = ({
           placeholder={isFocused ? "" : placeholder}
           className={`AutogrowingInput__textarea ${
             className || ""
-          } disabled:opacity-50 textarea textarea-bordered textarea-primary`}
+          } textarea textarea-bordered textarea-primary`}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           autoFocus={focus}

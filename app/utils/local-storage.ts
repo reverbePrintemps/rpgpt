@@ -1,18 +1,29 @@
 "use client";
 import "client-only";
+import { Theme } from "../constants/theme";
 import { TokenUsage } from "../types";
 
 export enum LocalStorageItems {
   TokenUsage = "token-usage",
+  Theme = "theme",
 }
 
-type LocalStorageItemsType = {
-  kind: LocalStorageItems.TokenUsage;
-  value: TokenUsage;
-};
+type LocalStorageItemsType =
+  | {
+      kind: LocalStorageItems.TokenUsage;
+      value: TokenUsage;
+    }
+  | {
+      kind: LocalStorageItems.Theme;
+      value: Theme;
+    };
 
 type ReturnType<T extends LocalStorageItemsType["kind"]> =
-  T extends LocalStorageItems.TokenUsage ? TokenUsage : never;
+  T extends LocalStorageItems.TokenUsage
+    ? TokenUsage
+    : T extends LocalStorageItems.Theme
+    ? Theme
+    : never;
 
 export const getFromLocalStorage = <T extends LocalStorageItemsType["kind"]>(
   item: T

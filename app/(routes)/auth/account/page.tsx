@@ -47,12 +47,12 @@ export default function Page() {
     day: "numeric",
   });
   return (
-    <div className="prose text-neutral-content">
-      <h1 className="text-neutral-content">Account</h1>
+    <div className="prose">
+      <h1>Account</h1>
       <div className="flex justify-between items-center">
         <div className="prose">
-          <h2 className="text-neutral-content">Email</h2>
-          <p className="text-neutral-content">{email}</p>
+          <h2>Email</h2>
+          <p>{email}</p>
         </div>
         <button className="btn btn-primary normal-case ml-8" onClick={signOut}>
           Sign Out
@@ -60,9 +60,7 @@ export default function Page() {
       </div>
       {usage?.[month] && (
         <>
-          <h2 id="usage" className="text-neutral-content">
-            Usage
-          </h2>
+          <h2 id="usage">Usage</h2>
           <div className="stats shadow">
             <div className="stat">
               <div className="stat-title">Tokens</div>

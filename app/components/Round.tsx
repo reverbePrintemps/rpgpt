@@ -35,6 +35,7 @@ interface RoundProps {
   isFinished?: boolean;
   isLoading?: boolean;
   className?: string;
+  disabled?: boolean;
   error?: Error;
   round: Round;
 }
@@ -47,6 +48,7 @@ export const Round = ({
   style,
   round,
   error,
+  disabled: disabledProp,
   onSubmit,
   className,
   isLoading,
@@ -59,6 +61,7 @@ export const Round = ({
   const [input, setInput] = useState("");
   const [optionSelected, setOptionSelected] = useState<RoundOption>();
   const [roundSubmitted, setRoundSubmitted] = useState(false);
+  const disabled = disabledProp || isLoading || roundSubmitted;
   const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
     onTextInputChange?.(e);
@@ -70,16 +73,15 @@ export const Round = ({
 
   useEffect(() => {
     if (optionSelected)
-      window.document
-        .querySelector("html")
-        ?.setAttribute("data-theme", optionSelected.ui_theme);
+      document.documentElement.setAttribute(
+        "data-theme",
+        optionSelected.ui_theme
+      );
   }, [optionSelected]);
 
   useEffect(() => {
     if (round.ui_theme)
-      window.document
-        .querySelector("html")
-        ?.setAttribute("data-theme", round.ui_theme);
+      document.documentElement.setAttribute("data-theme", round.ui_theme);
   }, [round]);
 
   return (
@@ -101,16 +103,14 @@ export const Round = ({
                 className={`btn btn-secondary normal-case ${
                   optionSelected?.id === o.id ? "btn-info" : ""
                 }
-               mr-2 my-2 text-left ${
-                 roundSubmitted ? "opacity-30" : ""
+               mr-2 my-2 text-left 
                  //  TODO Probably a better way to do this than !important
                } !shrink`}
                 onClick={() => {
                   onClick?.(o.text);
                   setOptionSelected(o);
                 }}
-                // TODO Use actual disabled state but override styles because not very accessible by default
-                // disabled={isLoading || roundSubmitted}
+                disabled={disabled}
               >
                 {o.text}
               </button>
@@ -128,7 +128,7 @@ export const Round = ({
                 onChange={handleOnChange}
                 placeholders={round.prompt_examples}
                 onSubmit={handleOnSubmit}
-                disabled={roundSubmitted}
+                disabled={disabled}
               />
             </>
           )}
