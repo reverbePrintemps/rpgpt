@@ -22,7 +22,7 @@ export type Round = {
   options: RoundOption[] | null;
   prompt_examples: string[] | null;
   game_over: "win" | "lose" | null;
-  ui_theme: Theme;
+  ui_theme?: Theme;
 };
 
 interface RoundProps {

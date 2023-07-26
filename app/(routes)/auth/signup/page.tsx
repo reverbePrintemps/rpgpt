@@ -6,6 +6,7 @@ import { auth, firestore } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { AuthForm } from "@/app/components/AuthForm";
 
 export default function Page() {
   const router = useRouter();
@@ -24,79 +25,46 @@ export default function Page() {
   if (user) router.push("/auth/account");
 
   return (
-    <>
-      {error && (
-        <Toast
-          vertical="top"
-          horizontal="center"
-          className="z-[1] w-full whitespace-normal"
-        >
-          <Alert status="error" className="flex justify-between">
-            <span>{error.message}</span>
-            <Button color="neutral" onClick={() => setError(undefined)}>
-              Dismiss
-            </Button>
-          </Alert>
-        </Toast>
-      )}
-      <div className="text-center prose">
-        <h1>Sign up</h1>
-      </div>
-      <Card className="flex-shrink-0 w-full shadow-2xl mt-8">
-        <Card.Body>
-          <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              createUser(email, password).then((userCredential) => {
-                if (userCredential)
-                  setDoc(doc(firestore, "users", userCredential.user.uid), {
-                    email: userCredential?.user.email,
-                    createdAt: serverTimestamp(),
-                  });
-              });
-            }}
-          >
-            <Form.Label title="Email" />
-            <Input
-              type="email"
-              placeholder="email"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              disabled={loading}
-            />
-            <Form.Label title="Password" />
-            <Input
-              type="password"
-              placeholder="password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              disabled={loading}
-            />
-            <Button
-              color="primary"
-              disabled={loading}
-              type="submit"
-              className="mt-8"
-            >
-              {loading ? (
-                <>
-                  <span className="loading loading-spinner loading-sm" />
-                  Loading
-                </>
-              ) : (
-                "Sign up"
-              )}
-            </Button>
-          </Form>
-          <Link href="/auth/signin">
-            <label className="label link text-sm">
-              Already have an account? Sign in
-            </label>
-          </Link>
-        </Card.Body>
-      </Card>
-    </>
+    <AuthForm
+      title="Sign up"
+      mainCTALabel="Create account"
+      error={error}
+      loading={loading}
+      onSubmit={(e) => {
+        e.preventDefault();
+        createUser(email, password).then((userCredential) => {
+          if (userCredential)
+            setDoc(doc(firestore, "users", userCredential.user.uid), {
+              email: userCredential?.user.email,
+              createdAt: serverTimestamp(),
+            });
+        });
+      }}
+      onErrorDismiss={() => setError(undefined)}
+      ctaAlternative={
+        <Link href="/auth/signin">Already have an account? Sign in</Link>
+      }
+    >
+      <label>Email</label>
+      <Input
+        type="email"
+        placeholder="email"
+        className="mt-2 text-base-content"
+        onChange={(e) => {
+          setEmail(e.target.value);
+        }}
+        disabled={loading}
+      />
+      <label className="mt-4">Password</label>
+      <Input
+        type="password"
+        placeholder="password"
+        className="mt-2 text-base-content"
+        onChange={(e) => {
+          setPassword(e.target.value);
+        }}
+        disabled={loading}
+      />
+    </AuthForm>
   );
 }

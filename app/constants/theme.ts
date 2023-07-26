@@ -19,3 +19,5 @@ export enum Theme {
   halloween = "halloween",
   dracula = "dracula",
 }
+
+export const DEFAULT_SELECTED_THEME = Theme.retro;

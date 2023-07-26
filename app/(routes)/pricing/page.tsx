@@ -55,7 +55,7 @@ export default function Page() {
           </Badge>
           <Card.Body>
             <Card.Title>
-              <h2>
+              <h2 className="mt-4">
                 Pay-as-you-go
                 <label className="label label-text-alt text-base-200">
                   {PRICE_PER_THOUSAND_TOKENS_USD.toLocaleString("en-US", {

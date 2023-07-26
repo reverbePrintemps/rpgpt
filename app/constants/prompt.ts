@@ -20,7 +20,6 @@ const promptExamples = [
 // * Order of properties is related to order in which they are responded to by the model
 const initialRound: Round = {
   id: 1,
-  ui_theme: Theme.light,
   prompt: "What kind of adventure would you like to go on?",
   prompt_examples: promptExamples,
   options: null,
@@ -56,7 +55,7 @@ const roundProperties = {
   options: getPropertyName(typicalRound, (x) => x.options),
   prompt_examples: getPropertyName(typicalRound, (x) => x.prompt_examples),
   game_over: getPropertyName(typicalRound, (x) => x.game_over),
-  ui_theme: getPropertyName(typicalRound, (x) => x.ui_theme),
+  ui_theme: getPropertyName(typicalRound, (x) => x.ui_theme || ""),
 } satisfies StringValuesType;
 
 const themeValuesString: string = Object.values(Theme)

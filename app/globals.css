@@ -35,3 +35,11 @@ ul {
 ul li:nth-child(n + 2) {
   margin-top: 1rem;
 }
+
+/* TODO Probably not the best way to be doing this */
+/* Overrides */
+
+.label a:hover {
+  --tw-text-opacity: 1;
+  color: hsl(var(--nc) / var(--tw-text-opacity));
+}

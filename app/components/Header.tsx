@@ -1,7 +1,7 @@
 "use client";
 import { CurrencyIconDollar } from "../assets/CurrencyIconDollar";
 import { AccountCircleIcon } from "../assets/AccountCircleIcon";
-import { Button, Dropdown, Navbar } from "react-daisyui";
+import { Button, Dropdown, Menu, Navbar } from "react-daisyui";
 import { usePathname } from "next/navigation";
 import { MenuIcon } from "../assets/MenuIcon";
 import { HomeIcon } from "../assets/HomeIcon";
@@ -9,6 +9,8 @@ import { DiceIcon } from "../assets/DiceIcon";
 import { useRouter } from "next/navigation";
 import { ThemePicker } from "./ThemePicker";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { DropdownArrowIcon } from "../assets/DropdownArrowIcon";
 
 export const Header = () => {
   const pathName = usePathname();
@@ -27,6 +29,7 @@ export const Header = () => {
               onClick={handleBackClick}
               className="btn btn-ghost normal-case"
             >
+              <DropdownArrowIcon classname="rotate-90" />
               Back
             </button>
           )}
@@ -40,27 +43,47 @@ export const Header = () => {
         </Navbar.Center>
         <Navbar.End className="text-end">
           <ThemePicker />
-          <Dropdown end>
-            <Button color="ghost" tabIndex={0}>
+          <Dropdown title="Menu" end>
+            <Button color="ghost" tabIndex={0} className="btn-sm sm:btn-md">
               <MenuIcon />
             </Button>
             <Dropdown.Menu tabIndex={0} className="w-52 menu-compact mt-3">
-              <Dropdown.Item href="/">
-                <HomeIcon />
-                Home
-              </Dropdown.Item>
-              <Dropdown.Item href="/game">
-                <DiceIcon />
-                Game
-              </Dropdown.Item>
-              <Dropdown.Item href="/auth/account">
-                <AccountCircleIcon />
-                Account
-              </Dropdown.Item>
-              <Dropdown.Item href="/pricing">
-                <CurrencyIconDollar />
-                Pricing
-              </Dropdown.Item>
+              <Menu.Item>
+                <Link
+                  href="/"
+                  className={`${pathName === "/" ? "active" : ""}`}
+                >
+                  <HomeIcon />
+                  Home
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link
+                  href="/game"
+                  className={`${pathName === "/game" ? "active" : ""}`}
+                >
+                  <DiceIcon />
+                  Game
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link
+                  href="/auth/account"
+                  className={`${pathName.includes("auth") ? "active" : ""}`}
+                >
+                  <AccountCircleIcon />
+                  Account
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link
+                  href="/pricing"
+                  className={`${pathName === "/pricing" ? "active" : ""}`}
+                >
+                  <CurrencyIconDollar />
+                  Pricing
+                </Link>
+              </Menu.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.End>
