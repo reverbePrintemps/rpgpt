@@ -4,7 +4,7 @@ export type AppUser = {
   createdAt: Timestamp;
   email: string;
   // TODO key is a month. Type this better.
-  usage: { [key: string]: number } | undefined;
+  token_usage: { [key: string]: number } | undefined;
   isPaying: boolean;
 };
 

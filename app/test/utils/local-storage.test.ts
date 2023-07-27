@@ -6,7 +6,7 @@ import {
 
 describe("getFromLocalStorage", () => {
   it("should return null if no value is stored", () => {
-    expect(getFromLocalStorage(LocalStorageItems.TokenUsage)).toBe(null);
+    expect(getFromLocalStorage(LocalStorageItems.TokenUsage, 0)).toBe(0);
   });
   it("should return stored value if it exists", () => {
     const tokenUsage = 500;
@@ -14,6 +14,8 @@ describe("getFromLocalStorage", () => {
       kind: LocalStorageItems.TokenUsage,
       value: tokenUsage,
     });
-    expect(getFromLocalStorage(LocalStorageItems.TokenUsage)).toBe(tokenUsage);
+    expect(getFromLocalStorage(LocalStorageItems.TokenUsage, 0)).toBe(
+      tokenUsage
+    );
   });
 });

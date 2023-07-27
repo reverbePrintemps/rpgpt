@@ -1,6 +1,7 @@
 "use client";
 import { CurrencyIconDollar } from "../assets/CurrencyIconDollar";
 import { AccountCircleIcon } from "../assets/AccountCircleIcon";
+import { DropdownArrowIcon } from "../assets/DropdownArrowIcon";
 import { Button, Dropdown, Menu, Navbar } from "react-daisyui";
 import { usePathname } from "next/navigation";
 import { MenuIcon } from "../assets/MenuIcon";
@@ -9,8 +10,6 @@ import { DiceIcon } from "../assets/DiceIcon";
 import { useRouter } from "next/navigation";
 import { ThemePicker } from "./ThemePicker";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { DropdownArrowIcon } from "../assets/DropdownArrowIcon";
 
 export const Header = () => {
   const pathName = usePathname();
@@ -47,11 +46,14 @@ export const Header = () => {
             <Button color="ghost" tabIndex={0} className="btn-sm sm:btn-md">
               <MenuIcon />
             </Button>
-            <Dropdown.Menu tabIndex={0} className="w-52 menu-compact mt-3">
+            <Dropdown.Menu
+              tabIndex={0}
+              className="w-52 menu-compact mt-3 bg-base-content"
+            >
               <Menu.Item>
                 <Link
                   href="/"
-                  className={`${pathName === "/" ? "active" : ""}`}
+                  className={`bg-base-100 ${pathName === "/" ? "active" : ""}`}
                 >
                   <HomeIcon />
                   Home
@@ -60,7 +62,9 @@ export const Header = () => {
               <Menu.Item>
                 <Link
                   href="/game"
-                  className={`${pathName === "/game" ? "active" : ""}`}
+                  className={`bg-base-100 ${
+                    pathName === "/game" ? "active" : ""
+                  } `}
                 >
                   <DiceIcon />
                   Game
@@ -69,7 +73,9 @@ export const Header = () => {
               <Menu.Item>
                 <Link
                   href="/auth/account"
-                  className={`${pathName.includes("auth") ? "active" : ""}`}
+                  className={`bg-base-100 ${
+                    pathName.includes("auth") ? "active" : ""
+                  }`}
                 >
                   <AccountCircleIcon />
                   Account
@@ -78,7 +84,9 @@ export const Header = () => {
               <Menu.Item>
                 <Link
                   href="/pricing"
-                  className={`${pathName === "/pricing" ? "active" : ""}`}
+                  className={`bg-base-100 ${
+                    pathName === "/pricing" ? "active" : ""
+                  }`}
                 >
                   <CurrencyIconDollar />
                   Pricing

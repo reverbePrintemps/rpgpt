@@ -36,7 +36,7 @@
 - [ ] Unify local/db token usage logic
 - [ ] Fix issue with window (or localStorage) not being available even though components are marked as "use client"
 - [ ] Create a constant for all routes in the app and use them instead of hardcoding strings
-- [ ] Improve accessibility of top level Menu (currently no focus nor focus state)
+- [ ] Improve accessibility of top level Menu (currently no focus nor focus state) and Theme picker
 - [ ] Fetch account info server side when loading /account
 - [ ] Refactor the logic to update token usage. Currently we get last 2 messages on a response. Better would be to update usage on a per-message basis.
 - [ ] Refactor/improve Round component by extracting components, state and logic where relevant.

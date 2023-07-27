@@ -26,17 +26,18 @@ type ReturnType<T extends LocalStorageItemsType["kind"]> =
     : never;
 
 export const getFromLocalStorage = <T extends LocalStorageItemsType["kind"]>(
-  item: T
-): ReturnType<T> | null => {
+  item: T,
+  fallbackValue: ReturnType<T>
+): ReturnType<T> => {
   const storedValue = localStorage.getItem(item);
-  return storedValue ? (JSON.parse(storedValue) as ReturnType<T>) : null;
+  return storedValue ? JSON.parse(storedValue) : fallbackValue;
 };
 
 export const setToLocalStorage = (item: LocalStorageItemsType) => {
   localStorage.setItem(item.kind, JSON.stringify(item.value));
 };
 
-// * Leaving this here for now as it might be useful when tackling issue with window being undefined.
+// * Been going back and forth between using this custom function and https://usehooks-ts.com/react-hook/use-local-storage
 
 // export const useLocalStorage = <T extends LocalStorageItemsType["kind"]>(
 //   item: T,
@@ -45,16 +46,13 @@ export const setToLocalStorage = (item: LocalStorageItemsType) => {
 //   const [value, setValue] = useState<ReturnType<T>>(fallbackValue);
 
 //   useEffect(() => {
-//     if (window.localStorage) setValue(getFromLocalStorage(item));
-//   }, [window]);
-
-//   useEffect(() => {
-//     const stored = getFromLocalStorage(item);
-//     setValue(stored ? JSON.parse(stored) : fallbackValue);
+//     if (typeof window === "undefined") return;
+//     getFromLocalStorage(item, fallbackValue);
 //   }, [item, fallbackValue]);
 
 //   useEffect(() => {
-//     setToLocalStorage({ kind: item, value: JSON.stringify(value) });
+//     if (typeof window === "undefined") return;
+//     setToLocalStorage({ kind: item, value } as LocalStorageItemsType);
 //   }, [item, value]);
 
 //   return [value, setValue];

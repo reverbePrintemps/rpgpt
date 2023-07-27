@@ -1,32 +1,28 @@
 import { DEFAULT_SELECTED_THEME, Theme } from "../constants/theme";
 import { DropdownArrowIcon } from "../assets/DropdownArrowIcon";
 import { ThemePickerIcon } from "../assets/ThemePickerIcon";
+import { LocalStorageItems } from "../utils/local-storage";
+import { useLocalStorage } from "usehooks-ts";
 import { useEffect, useState } from "react";
 import { Dropdown } from "react-daisyui";
-import {
-  LocalStorageItems,
-  setToLocalStorage,
-  getFromLocalStorage,
-} from "../utils/local-storage";
 
 export const ThemePicker = () => {
-  const [selectedTheme, setSelectedTheme] = useState<Theme>(
-    getFromLocalStorage(LocalStorageItems.Theme) || DEFAULT_SELECTED_THEME
+  const [selectedTheme, setSelectedTheme] = useState(DEFAULT_SELECTED_THEME);
+  const [theme, setTheme] = useLocalStorage(
+    LocalStorageItems.Theme,
+    DEFAULT_SELECTED_THEME
   );
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", selectedTheme);
-  }, [selectedTheme]);
+    if (theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+  }, [theme]);
 
   const changeTheme = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const theme = e.currentTarget.getAttribute("data-set-theme") as Theme;
     setSelectedTheme(theme);
-    if (!theme) return;
-    document.documentElement.setAttribute("data-theme", theme);
-    setToLocalStorage({
-      kind: LocalStorageItems.Theme,
-      value: theme,
-    });
+    setTheme(theme);
   };
 
   return (

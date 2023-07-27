@@ -4,45 +4,22 @@ import { MAX_TOKENS_FREE_USER } from "@/app/constants/general";
 import { initialMessages } from "../../constants/prompt";
 import { Alert, Button, Progress } from "react-daisyui";
 import { scrollToBottom } from "../../utils/scrolling";
-import { updateUsage } from "@/app/firebase/functions";
 import { useUserData } from "@/app/hooks/firebase";
 import { forceParse } from "../../utils/parsing";
 import { InfoIcon } from "@/app/assets/InfoIcon";
 import { Round } from "../../components/Round";
-import { auth } from "@/app/firebase/config";
-import { TokenUsage } from "@/app/types";
 import { useChat } from "ai/react";
 import Link from "next/link";
-import {
-  LocalStorageItems,
-  getFromLocalStorage,
-} from "@/app/utils/local-storage";
+import { getTokens } from "@/app/utils/general";
+import { updateTokenUsage, useTokenUsage } from "@/app/utils/database";
 
 export default function Page() {
   const ref = useRef<HTMLDivElement>(null);
-  const { isPaying, usage } = useUserData();
+  const { isPaying } = useUserData();
   const [isFinished, setIsFinished] = useState(false);
   const [rounds, setRounds] = useState<Round[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error>();
-  const signedIn = auth.currentUser?.uid;
-  // TODO Unify usage from local storage and firebase
-  const month = new Date().toLocaleDateString("default", { month: "long" });
-  const [localTokenUsage, setLocalTokenUsage] = useState<TokenUsage | null>(
-    null
-  );
-  const tokenUsage = signedIn ? usage?.[month] || 0 : localTokenUsage;
-
-  // Need to wrap this in a useEffect to make sure window is defined before using local storage even though this is a client component. Not sure why.
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const localUsage = getFromLocalStorage(LocalStorageItems.TokenUsage);
-      setLocalTokenUsage(localUsage);
-    }
-  }, [
-    typeof window !== "undefined" &&
-      getFromLocalStorage(LocalStorageItems.TokenUsage),
-  ]);
 
   const {
     isLoading: isWriting,
@@ -68,10 +45,17 @@ export default function Page() {
     },
   });
 
+  const month = new Date().toLocaleDateString("default", { month: "long" });
+
+  const tokenUsage = useTokenUsage(month);
+
   useEffect(() => {
     if (!isFinished) return;
     const lastTwoMessages = messages.slice(-2);
-    updateUsage(lastTwoMessages);
+    const newTokens = getTokens(lastTwoMessages);
+    if (newTokens) {
+      updateTokenUsage(newTokens);
+    }
   }, [isFinished, messages]);
 
   useEffect(() => {
@@ -111,9 +95,9 @@ export default function Page() {
     reload();
   };
 
-  const tokenUsagePercentage = Math.round(
-    (Number(tokenUsage) / MAX_TOKENS_FREE_USER) * 100
-  );
+  const tokenUsagePercentage = tokenUsage
+    ? Math.round((tokenUsage / MAX_TOKENS_FREE_USER) * 100)
+    : 0;
 
   const exhaustedFreeTokens = tokenUsagePercentage >= 100;
 
