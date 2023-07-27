@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Dropdown } from "react-daisyui";
 
 export const ThemePicker = () => {
-  const [selectedTheme, setSelectedTheme] = useState(DEFAULT_SELECTED_THEME);
+  const [selectedTheme, setSelectedTheme] = useState<Theme>();
   const [theme, setTheme] = useLocalStorage(
     LocalStorageItems.Theme,
     DEFAULT_SELECTED_THEME
@@ -16,6 +16,7 @@ export const ThemePicker = () => {
   useEffect(() => {
     if (theme) {
       document.documentElement.setAttribute("data-theme", theme);
+      setSelectedTheme(theme);
     }
   }, [theme]);
 
