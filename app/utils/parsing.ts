@@ -7,9 +7,14 @@
  * @returns string
  * @description This function takes a string representation of a JSON object and completes any open strings, arrays, and objects while attempting to prevent common parsing errors.
  */
-export const forceParse = (fragment: string): string | object | undefined => {
+export const forceParse = (fragment: string): string | object | null => {
   const stack: Array<string> = []; // Stack to keep track of opening symbols
   let currentIndex = 0;
+
+  // Replace escaped newlines and doublequotes with single quotes
+  fragment = fragment.replace(/\\n/g, "").replace(/\\"/g, "'");
+  ["development", "test"].includes(process.env.NODE_ENV) &&
+    console.log("fragment", fragment);
 
   while (currentIndex < fragment.length) {
     const char = fragment[currentIndex];
@@ -73,5 +78,5 @@ export const forceParse = (fragment: string): string | object | undefined => {
       console.log("failed to parse:", fragment);
   }
 
-  return undefined; // Return undefined if parsing fails
+  return null; // Return undefined if parsing fails
 };
