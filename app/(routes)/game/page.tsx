@@ -1,4 +1,5 @@
 "use client";
+import { updateTokenUsage, useTokenUsage } from "@/app/utils/database";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { MAX_TOKENS_FREE_USER } from "@/app/constants/general";
 import { initialMessages } from "../../constants/prompt";
@@ -7,15 +8,14 @@ import { scrollToBottom } from "../../utils/scrolling";
 import { useUserData } from "@/app/hooks/firebase";
 import { forceParse } from "../../utils/parsing";
 import { InfoIcon } from "@/app/assets/InfoIcon";
+import { getTokens } from "@/app/utils/general";
 import { Round } from "../../components/Round";
 import { useChat } from "ai/react";
 import Link from "next/link";
-import { getTokens } from "@/app/utils/general";
-import { updateTokenUsage, useTokenUsage } from "@/app/utils/database";
 
 export default function Page() {
   const ref = useRef<HTMLDivElement>(null);
-  const { isPaying } = useUserData();
+  const { isPaying, stripe } = useUserData();
   const [isFinished, setIsFinished] = useState(false);
   const [rounds, setRounds] = useState<Round[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +54,7 @@ export default function Page() {
     const lastTwoMessages = messages.slice(-2);
     const newTokens = getTokens(lastTwoMessages);
     if (newTokens) {
-      updateTokenUsage(newTokens);
+      updateTokenUsage(newTokens, tokenUsage, stripe?.subscriptionItemId);
     }
   }, [isFinished, messages]);
 
@@ -99,7 +99,7 @@ export default function Page() {
     ? Math.round((tokenUsage / MAX_TOKENS_FREE_USER) * 100)
     : 0;
 
-  const exhaustedFreeTokens = tokenUsagePercentage >= 100;
+  const exhaustedFreeTokens = !isPaying && tokenUsagePercentage >= 100;
 
   return (
     <div ref={ref} className="scroll-m-62 w-full relative">

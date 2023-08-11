@@ -1,33 +1,23 @@
-import { DetailedHTMLProps, HTMLAttributes } from "react";
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "stripe-pricing-table": DetailedHTMLProps<
-        HTMLAttributes<HTMLElement>,
-        HTMLElement
-      >;
-    }
-  }
-}
-
-const pricingTableId = ["development", "test"].includes(process.env.NODE_ENV)
-  ? process.env.STRIPE_PRICING_TABLE_ID_TEST
-  : process.env.NODE_ENV === "production"
-  ? process.env.STRIPE_PRICING_TABLE_ID_PRODUCTION
-  : "";
-
-const publishableKey = ["development", "test"].includes(process.env.NODE_ENV)
-  ? process.env.STRIPE_PUBLISHABLE_KEY_TEST
-  : process.env.NODE_ENV === "production"
-  ? process.env.STRIPE_PUBLISHABLE_KEY_PRODUCTION
-  : "";
+"use client";
+import { PaymentElement } from "@stripe/react-stripe-js";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase/config";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Page() {
+  const router = useRouter();
+  const [user, loading] = useAuthState(auth);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/auth/signin?error=authentication-required");
+    }
+  }, [user, loading]);
+
   return (
-    <stripe-pricing-table
-      pricing-table-id={pricingTableId}
-      publishable-key={publishableKey}
-    />
+    <form>
+      <button>Submit</button>
+    </form>
   );
 }

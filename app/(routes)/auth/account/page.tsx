@@ -1,9 +1,8 @@
 "use client";
+import { LocalStorageItems, useLocalStorage } from "@/app/utils/local-storage";
 import { PRICE_PER_THOUSAND_TOKENS_USD } from "@/app/constants/general";
 import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
-import { LocalStorageItems } from "@/app/utils/local-storage";
 import { useUserData } from "@/app/hooks/firebase";
-import { useLocalStorage } from "usehooks-ts";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -14,7 +13,7 @@ export default function Page() {
   // TODO Use loading and error for both
   const [user, loading] = useAuthState(auth);
   const [signOut] = useSignOut(auth);
-  const [_, setLocalTokenUsage] = useLocalStorage(
+  const { setValue: setLocalTokenUsage } = useLocalStorage(
     LocalStorageItems.TokenUsage,
     0
   );
@@ -52,10 +51,10 @@ export default function Page() {
         <div className="prose">
           <h2>Email</h2>
           <p>{email}</p>
+          <button className="btn btn-primary normal-case" onClick={signOut}>
+            Sign Out
+          </button>
         </div>
-        <button className="btn btn-primary normal-case ml-8" onClick={signOut}>
-          Sign Out
-        </button>
       </div>
       {token_usage?.[month] && (
         <>

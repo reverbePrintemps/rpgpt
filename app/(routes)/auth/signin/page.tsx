@@ -3,10 +3,9 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { AuthForm } from "@/app/components/AuthForm";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
-import { ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "react-daisyui";
 import Link from "next/link";
-import { ButtonProps } from "react-daisyui/dist/Button";
 
 export default function Page() {
   const router = useRouter();

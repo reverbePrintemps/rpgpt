@@ -1,14 +1,13 @@
+import { LocalStorageItems, useLocalStorage } from "../utils/local-storage";
 import { DEFAULT_SELECTED_THEME, Theme } from "../constants/theme";
 import { DropdownArrowIcon } from "../assets/DropdownArrowIcon";
 import { ThemePickerIcon } from "../assets/ThemePickerIcon";
-import { LocalStorageItems } from "../utils/local-storage";
-import { useLocalStorage } from "usehooks-ts";
 import { useEffect, useState } from "react";
 import { Dropdown } from "react-daisyui";
 
 export const ThemePicker = () => {
   const [selectedTheme, setSelectedTheme] = useState<Theme>();
-  const [theme, setTheme] = useLocalStorage(
+  const { value: theme, setValue: setTheme } = useLocalStorage(
     LocalStorageItems.Theme,
     DEFAULT_SELECTED_THEME
   );

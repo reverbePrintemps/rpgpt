@@ -1,31 +1,42 @@
-import { LocalStorageItems, setToLocalStorage } from "./local-storage";
 import { updateFirestoreTokenUsage } from "../firebase/functions";
 import { useUserData } from "../hooks/firebase";
-import { useLocalStorage } from "usehooks-ts";
-import { useEffect, useState } from "react";
+import {
+  useLocalStorage,
+  LocalStorageItems,
+  setToLocalStorage,
+} from "./local-storage";
 
-export const updateTokenUsage = (tokens: number) => {
+export const updateTokenUsage = async (
+  newTokens: number,
+  existingTokens?: number | null,
+  subscriptionId?: string
+) => {
   setToLocalStorage({
     kind: LocalStorageItems.TokenUsage,
-    value: tokens,
+    value: newTokens + (existingTokens || 0),
   });
-  // ! Culprit 1
-  updateFirestoreTokenUsage(tokens);
+  updateFirestoreTokenUsage(newTokens);
+
+  if (subscriptionId) {
+    const response = await fetch("/api/stripe/update-token-usage", {
+      method: "POST",
+      body: JSON.stringify({
+        subscriptionId,
+        tokens: newTokens,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update token usage");
+    }
+  }
 };
 
 export const useTokenUsage = (month: string) => {
-  const [hasMounted, setHasMounted] = useState(false);
-  const [localTokenUsage] = useLocalStorage(LocalStorageItems.TokenUsage, 0);
-  // ! Culprit 2
+  const { value: localTokenUsage } = useLocalStorage(
+    LocalStorageItems.TokenUsage,
+    0
+  );
   const { token_usage } = useUserData();
-
-  // * Need to use this ridiculousness to avoid hydration mismatch errors from useLocalStorage ¯\_(ツ)_/¯
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-  if (!hasMounted) {
-    return null;
-  }
 
   const tokenUsage = token_usage?.[month] || localTokenUsage;
 

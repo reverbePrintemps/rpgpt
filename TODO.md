@@ -2,12 +2,22 @@
 
 ## Ongoing
 
-- [ ] Implement save payment details and pay later (https://stripe.com/docs/payments/save-and-reuse?platform=web&ui=checkout)
+- [ ] [Implement metered usage billing](https://stripe.com/docs/billing/subscriptions/usage-based)
+  - [x] Pricing table
+  - [x] Update user with subscription id
+  - [ ] Report usage to Stripe using subscription id
+  - [ ] Redirect to rpgpt after successful payment
+  - [ ] Offer cancelation
+  - [ ] Before merging, review env keys
 
 ## Backlog
 
 ### Features
 
+- [ ] Confirmation and redirect after password reset
+- [ ] Share button (summary? link to game?)
+- [ ] Create action acknowledgement system message (fe. "You have successfully signed up!")
+- [ ] Persist form input data across auth pages. (ie. if you're on the sign up page and you switch to the sign in page, the email you entered should still be there)
 - [ ] Bottom tabs for navigation on mobile
 - [ ] What if no local storage? Use cookies? Or force login?
 - [ ] Improve content/styling of home page
@@ -32,6 +42,7 @@
 
 ### Tech debt
 
+- [ ] Probably don't need duplicate env keys for separate environments. Use one key only locally and import them by env into Vercel.
 - [ ] Remove all usage of "prose" classNames and uninstall @tailwindcss/typography (doesn't actually make things easy when themes are involved)
 - [ ] Unify local/db token usage logic
 - [ ] Fix issue with window (or localStorage) not being available even though components are marked as "use client"
