@@ -6,8 +6,10 @@ import {
   MAX_TOKENS_FREE_USER,
   PRICE_PER_THOUSAND_TOKENS_USD,
 } from "@/app/constants/general";
+import { useUserData } from "@/app/hooks/firebase";
 
 export default function Page() {
+  const { uid } = useUserData();
   return (
     <>
       <Hero>
@@ -94,7 +96,9 @@ export default function Page() {
               </li>
             </ul>
             <Card.Actions className="justify-end mt-8">
-              <button className="btn btn-primary">Pay as you go</button>
+              <Link href={`/checkout?cri=${uid}`} className="btn btn-primary">
+                Pay as you go
+              </Link>
             </Card.Actions>
           </Card.Body>
         </Card>

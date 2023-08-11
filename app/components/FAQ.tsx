@@ -36,7 +36,7 @@ export const FAQ = () => {
                   4 characters typically correspond to one token
                 </Link>
                 . For example: for the sentence "I drink a potion", the 16
-                correspond to 4 tokens.
+                characters correspond to 4 tokens.
               </p>
               <p className="mt-4">
                 However, when using <strong>rpgpt</strong>, bear in mind that we

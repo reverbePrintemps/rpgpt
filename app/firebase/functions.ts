@@ -17,6 +17,6 @@ export const updateFirestoreTokenUsage = async (newTokens: number) => {
   const currentUsage = userDocData?.token_usage?.[month] || 0;
 
   await updateDoc(userRef, {
-    usage: { [month]: currentUsage + newTokens },
+    token_usage: { [month]: currentUsage + newTokens },
   });
 };

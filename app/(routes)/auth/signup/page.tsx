@@ -1,12 +1,12 @@
 "use client";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { Alert, Button, Card, Hero, Input, Toast, Form } from "react-daisyui";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/app/firebase/config";
+import { AuthForm } from "@/app/components/AuthForm";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Input } from "react-daisyui";
 import Link from "next/link";
-import { AuthForm } from "@/app/components/AuthForm";
 
 export default function Page() {
   const router = useRouter();

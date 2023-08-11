@@ -1,5 +1,6 @@
 "use client";
 import "client-only";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { Theme } from "../constants/theme";
 import { TokenUsage } from "../types";
 
@@ -33,27 +34,31 @@ export const getFromLocalStorage = <T extends LocalStorageItemsType["kind"]>(
   return storedValue ? JSON.parse(storedValue) : fallbackValue;
 };
 
-export const setToLocalStorage = (item: LocalStorageItemsType) => {
-  localStorage.setItem(item.kind, JSON.stringify(item.value));
+export const setToLocalStorage = <T extends LocalStorageItemsType["kind"]>({
+  kind,
+  value,
+}: {
+  kind: T;
+  value: ReturnType<T>;
+}): void => {
+  localStorage.setItem(kind, JSON.stringify(value));
 };
 
-// * Been going back and forth between using this custom function and https://usehooks-ts.com/react-hook/use-local-storage
+export const useLocalStorage = <T extends LocalStorageItemsType["kind"]>(
+  kind: T,
+  fallbackValue: ReturnType<T>
+) => {
+  const [value, setValue] = useState<ReturnType<T>>();
 
-// export const useLocalStorage = <T extends LocalStorageItemsType["kind"]>(
-//   item: T,
-//   fallbackValue: ReturnType<T>
-// ): [ReturnType<T>, Dispatch<SetStateAction<ReturnType<T>>>] => {
-//   const [value, setValue] = useState<ReturnType<T>>(fallbackValue);
+  useEffect(() => {
+    setValue(getFromLocalStorage(kind, fallbackValue));
+  }, [kind, fallbackValue]);
 
-//   useEffect(() => {
-//     if (typeof window === "undefined") return;
-//     getFromLocalStorage(item, fallbackValue);
-//   }, [item, fallbackValue]);
-
-//   useEffect(() => {
-//     if (typeof window === "undefined") return;
-//     setToLocalStorage({ kind: item, value } as LocalStorageItemsType);
-//   }, [item, value]);
-
-//   return [value, setValue];
-// };
+  return {
+    value,
+    setValue: (newValue: ReturnType<T>) => {
+      setValue(newValue);
+      setToLocalStorage({ kind, value: newValue });
+    },
+  };
+};
