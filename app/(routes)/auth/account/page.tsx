@@ -1,8 +1,8 @@
 "use client";
 import { LocalStorageItems, useLocalStorage } from "@/app/utils/local-storage";
-import { PRICE_PER_THOUSAND_TOKENS_USD } from "@/app/constants/general";
 import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import { getLocalizedDateString } from "@/app/utils/datetime";
+import { PRICE_PER_TOKEN_USD } from "@/app/constants/general";
 import { useUserData } from "@/app/hooks/firebase";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
@@ -63,14 +63,14 @@ export default function Page() {
             <div className="stat">
               <div className="stat-title text-info-content">USD</div>
               <div className="stat-value">
-                {(
-                  (token_usage[month] * PRICE_PER_THOUSAND_TOKENS_USD) /
-                  1000
-                ).toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 3,
-                })}
+                {(token_usage[month] * PRICE_PER_TOKEN_USD).toLocaleString(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 3,
+                  }
+                )}
               </div>
               <div className="stat-desc text-info-content">1 - {today}</div>
             </div>
