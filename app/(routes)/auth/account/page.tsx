@@ -2,6 +2,7 @@
 import { LocalStorageItems, useLocalStorage } from "@/app/utils/local-storage";
 import { PRICE_PER_THOUSAND_TOKENS_USD } from "@/app/constants/general";
 import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
+import { getLocalizedDateString } from "@/app/utils/datetime";
 import { useUserData } from "@/app/hooks/firebase";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
@@ -18,6 +19,13 @@ export default function Page() {
     0
   );
 
+  const month = getLocalizedDateString({ month: "long" });
+  const today = getLocalizedDateString({
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
   useEffect(() => {
     if (!loading && !user) {
       router.push("/auth/signin");
@@ -31,19 +39,6 @@ export default function Page() {
     }
   }, [token_usage]);
 
-  const month = new Date().toLocaleDateString("default", { month: "long" });
-  const today = new Date().toLocaleDateString("default", {
-    month: "short",
-    day: "numeric",
-  });
-  const firstDayOfCurrentMonth = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    1
-  ).toLocaleDateString("default", {
-    month: "short",
-    day: "numeric",
-  });
   return (
     <div className="prose">
       <h1>Account</h1>
@@ -59,16 +54,14 @@ export default function Page() {
       {token_usage?.[month] && (
         <>
           <h2 id="usage">Usage</h2>
-          <div className="stats shadow">
+          <div className="stats shadow bg-info text-info-content">
             <div className="stat">
-              <div className="stat-title">Tokens</div>
+              <div className="stat-title text-info-content">Tokens</div>
               <div className="stat-value">{token_usage[month]}</div>
-              <div className="stat-desc">
-                {firstDayOfCurrentMonth} - {today}
-              </div>
+              <div className="stat-desc text-info-content">1 - {today}</div>
             </div>
             <div className="stat">
-              <div className="stat-title">USD</div>
+              <div className="stat-title text-info-content">USD</div>
               <div className="stat-value">
                 {(
                   (token_usage[month] * PRICE_PER_THOUSAND_TOKENS_USD) /
@@ -79,9 +72,7 @@ export default function Page() {
                   maximumFractionDigits: 3,
                 })}
               </div>
-              <div className="stat-desc">
-                {firstDayOfCurrentMonth} - {today}
-              </div>
+              <div className="stat-desc text-info-content">1 - {today}</div>
             </div>
           </div>
         </>

@@ -2,13 +2,12 @@
 
 ## Ongoing
 
-- [ ] [Implement metered usage billing](https://stripe.com/docs/billing/subscriptions/usage-based)
-  - [x] Pricing table
-  - [x] Update user with subscription id
-  - [ ] Report usage to Stripe using subscription id
-  - [ ] Redirect to rpgpt after successful payment
+- [x] [Implement metered usage billing](https://stripe.com/docs/billing/subscriptions/usage-based)
+  - [x] Update user (db) with Stripe customer id and subscription item id
+  - [x] Report usage to Stripe
+  - [x] Redirect to rpgpt after successful payment
   - [ ] Offer cancelation
-  - [ ] Before merging, review env keys
+  - [x] Before merging, review env keys
 
 ## Backlog
 
