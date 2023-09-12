@@ -31,7 +31,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Footer />
         <Analytics />
       </body>
-      <Script async src="https://js.stripe.com/v3/pricing-table.js" />
     </html>
   );
 }
