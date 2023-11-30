@@ -2,22 +2,20 @@
 
 An AI-powered, text-based adventure role-playing game.
 
-## Setup
+Currently deployed at: https://rpgpt-ai.vercel.app/
+
+## Running locally
 
 1. Clone the repository
 2. [Get an openAI API key](https://platform.openai.com/account/api-keys) and ❗️ **make sure to attach your payments details to your OpenAI account, otherwise your API key won't work!** ❗️ (you can set a usage limit to avoid any unexpected charges)
 3. Create a `.env.local` file at root of the project
 4. Add the following to your `.env.local` file:
-
 ```
 OPENAI_KEY=<your openAI key>
 ```
-
-## Run
-
-1. `npm install` to install dependencies
-2. `npm run dev` to run the app in development mode
-3. Visit [http://localhost:3000](http://localhost:3000) to view the app
+5. `npm install` to install dependencies
+6. `npm run dev` to run the app in development mode
+7. Visit [http://localhost:3000](http://localhost:3000) to view the app
 
 ## Stack
 
